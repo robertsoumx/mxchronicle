@@ -1,14 +1,17 @@
-const tabs = document.querySelectorAll(".tabs button");
-const pages = document.querySelectorAll(".page");
+function openArticle(id) {
+  window.location.href = `article.html?id=${id}`;
+}
 
-tabs.forEach(tab => {
-  tab.addEventListener("click", () => {
-    // Remove active states
-    tabs.forEach(t => t.classList.remove("active"));
-    pages.forEach(p => p.classList.remove("active"));
+function loadArticle() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+  const article = articles[id];
 
-    // Activate selected
-    tab.classList.add("active");
-    document.getElementById(tab.dataset.page).classList.add("active");
-  });
-});
+  if (!article) return;
+
+  document.getElementById("article-title").innerText = article.title;
+  document.getElementById("article-meta").innerText =
+    `${article.author} · ${article.date}`;
+  document.getElementById("article-image").src = article.image;
+  document.getElementById("article-content").innerHTML = article.content;
+}

@@ -4,17 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MX Chronicles · Articles</title>
-
-  <!-- CSS -->
   <link rel="stylesheet" href="style.css">
-
-  <!-- JS -->
   <script src="articles.js" defer></script>
   <script src="script.js" defer></script>
 </head>
 <body onload="renderArticles()">
 
-<!-- HEADER / NAV -->
 <header class="site-header">
   <div class="masthead">MX Chronicles</div>
   <nav class="nav-tabs">
@@ -25,7 +20,6 @@
   </nav>
 </header>
 
-<!-- MAIN CONTENT -->
 <main class="container">
 
   <!-- SEARCH & SORT -->
@@ -40,28 +34,28 @@
   </div>
 
   <!-- ARTICLE LIST -->
-  <div id="article-list">
-    <!-- JS will populate this dynamically -->
-  </div>
+  <div id="article-list"></div>
 
 </main>
 
 <script>
 function renderArticles() {
-  const container = document.getElementById('article-list');
-  container.innerHTML = '';
-  for(const [id, a] of Object.entries(articles)){
-    const div = document.createElement('div');
-    div.className = 'article-list-item';
-    div.onclick = () => openArticle(id);
-    div.innerHTML = `
-      <h3>${a.title}</h3>
-      <div class="meta">${a.author} · ${a.date} · ${a.issue || ''}</div>
-    `;
-    container.appendChild(div);
+  const searchValue = document.getElementById('search').value.toLowerCase();
+  const sortValue = document.getElementById('sort').value;
+
+  const listContainer = document.getElementById('article-list');
+  listContainer.innerHTML = '';
+
+  let sortedArticles = Object.entries(articles);
+
+  // Filter
+  if(searchValue){
+    sortedArticles = sortedArticles.filter(([id, a]) =>
+      a.title.toLowerCase().includes(searchValue) ||
+      a.author.toLowerCase().includes(searchValue) ||
+      (a.issue && a.issue.toLowerCase().includes(searchValue))
+    );
   }
-}
-document.addEventListener('DOMContentLoaded', renderArticles);
 
   // Sort
   sortedArticles.sort(([, a], [, b]) => {
@@ -76,7 +70,6 @@ document.addEventListener('DOMContentLoaded', renderArticles);
     const div = document.createElement('div');
     div.className = 'article-list-item';
     div.onclick = () => openArticle(id);
-
     div.innerHTML = `
       <h3>${a.title}</h3>
       <div class="meta">${a.author} · ${a.date} · ${a.issue || ''}</div>

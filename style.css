@@ -1,45 +1,27 @@
-/* ========================== */
-/* GLOBAL STYLES */
-/* ========================== */
+/* --------------------- */
+/* GLOBAL / BODY */
 body {
   margin: 0;
   font-family: 'Merriweather', serif;
-  background: #f9f4ec;
+  background: linear-gradient(135deg, #f9f4ec 0%, #e5d9b6 100%);
   color: #2c2c2c;
+  background-attachment: fixed;
 }
 
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
-.container {
-  width: 90%;
-  max-width: 1200px;
-  margin: 2rem auto;
-}
-
-/* ========================== */
-/* HEADER / NAV */
-/* ========================== */
+/* --------------------- */
+/* HEADER */
 .site-header {
   background: #e8dfc4;
   padding: 1rem 0;
   border-bottom: 2px solid #c9b79c;
   text-align: center;
 }
-
 .masthead {
   font-family: 'Playfair Display', serif;
   font-size: 2.5rem;
   letter-spacing: 0.05em;
   margin-bottom: 0.5rem;
 }
-
-.nav-tabs {
-  margin-top: 0.5rem;
-}
-
 .nav-tabs a {
   margin: 0 1rem;
   padding-bottom: 0.25rem;
@@ -48,19 +30,16 @@ a {
   border-bottom: 2px solid transparent;
   transition: all 0.2s ease;
 }
-
 .nav-tabs a:hover,
-.nav-tabs a.active {
-  border-bottom: 2px solid #2c2c2c;
-}
+.nav-tabs a.active { border-bottom: 2px solid #2c2c2c; }
 
-/* ========================== */
-/* HOMEPAGE GRID */
-/* ========================== */
+/* --------------------- */
+/* HOME GRID */
 .home-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
   gap: 2rem;
+  padding: 2rem 0;
 }
 
 /* FEATURED ARTICLE */
@@ -69,19 +48,19 @@ a {
   border: 2px solid #c9b79c;
   padding: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-
+.home-feature:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(0,0,0,0.2);}
 .home-feature img {
   margin-top: 1rem;
   width: 100%;
   border-radius: 6px;
   object-fit: cover;
-  max-height: 200px;
+  max-height: 220px;
 }
 
 /* STANDARD ARTICLE */
@@ -93,12 +72,7 @@ a {
   cursor: pointer;
   transition: all 0.2s ease;
 }
-
-.home-article:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-}
-
+.home-article:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.1);}
 .home-article img {
   margin-top: 0.5rem;
   width: 100%;
@@ -107,21 +81,12 @@ a {
   max-height: 150px;
 }
 
-/* ARTICLE META & SYNOPSIS */
-.meta {
-  font-size: 0.85rem;
-  color: #555;
-  margin-bottom: 0.5rem;
-}
+/* META & SYNOPSIS */
+.meta { font-size: 0.85rem; color: #555; margin-bottom: 0.5rem; }
+.synopsis { font-size: 0.9rem; line-height: 1.4; }
 
-.synopsis {
-  font-size: 0.9rem;
-  line-height: 1.4;
-}
-
-/* ========================== */
-/* STAFF PORTAL STYLES */
-/* ========================== */
+/* --------------------- */
+/* STAFF PORTAL */
 #login-section, #admin-panel {
   background: #fff8f0;
   border: 2px solid #c9b79c;
@@ -129,10 +94,8 @@ a {
   border-radius: 8px;
   max-width: 800px;
   margin: 2rem auto;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-  font-family: 'Merriweather', serif;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
-
 #admin-panel section {
   background: #fff5eb;
   border: 1px solid #c9b79c;
@@ -141,7 +104,6 @@ a {
   border-radius: 6px;
   box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
 }
-
 #admin-panel button {
   padding: 0.5rem 1rem;
   background: #c9b79c;
@@ -151,14 +113,8 @@ a {
   font-family: 'Lato', sans-serif;
   transition: 0.2s ease;
 }
-#admin-panel button:hover {
-  background: #b89b7c;
-}
-
-#admin-panel h2, #admin-panel h3 {
-  font-family: 'Playfair Display', serif;
-}
-
+#admin-panel button:hover { background: #b89b7c; }
+#admin-panel h2, #admin-panel h3 { font-family: 'Playfair Display', serif; }
 #admin-panel input, #admin-panel textarea, #admin-panel select {
   width: 100%;
   padding: 0.5rem;
@@ -167,14 +123,9 @@ a {
   border-radius: 4px;
 }
 
+/* --------------------- */
 /* RESPONSIVE */
-@media(max-width: 800px){
-  .home-grid {
-    grid-template-columns: 1fr;
-  }
-
-  #login-section, #admin-panel {
-    margin: 1rem;
-    padding: 1rem;
-  }
+@media(max-width:800px){
+  .home-grid { grid-template-columns:1fr; }
+  #login-section, #admin-panel { margin:1rem; padding:1rem; }
 }

@@ -24,7 +24,6 @@
 
   <h1>Staff Portal</h1>
 
-  <!-- Password section -->
   <div id="login-section">
     <p>Enter administrator password:</p>
     <input type="password" id="staff-password" placeholder="Password">
@@ -32,11 +31,9 @@
     <p id="login-error" style="color:red;"></p>
   </div>
 
-  <!-- Admin panel -->
   <div id="admin-panel" style="display:none;">
     <h2>Welcome, Admin!</h2>
 
-    <!-- Add Article -->
     <section>
       <h3>Add New Article</h3>
       <input type="text" id="new-article-id" placeholder="Unique Article ID"><br>
@@ -50,7 +47,6 @@
       <button onclick="addArticle()">Add Article</button>
     </section>
 
-    <!-- Add Staff -->
     <section>
       <h3>Add Staff Member</h3>
       <input type="text" id="new-staff-name" placeholder="Staff Name"><br>
@@ -58,7 +54,6 @@
       <button onclick="addStaff()">Add Staff</button>
     </section>
 
-    <!-- Homepage Layout -->
     <section>
       <h3>Homepage Featured Article</h3>
       <select id="homepage-featured">
@@ -68,79 +63,71 @@
       <button onclick="unfeatureArticle()">Unfeature</button>
       <p style="font-size:0.9rem;color:#555;">Setting featured article will update the homepage tile immediately.</p>
     </section>
+
   </div>
 
 </main>
 
 <script>
-  const ADMIN_PASSWORD = "26MXChronicles";
+const ADMIN_PASSWORD = "26MXChronicles";
 
-  // Login
-  function checkPassword() {
-    const input = document.getElementById("staff-password").value;
-    if (input === ADMIN_PASSWORD) {
-      document.getElementById("login-section").style.display = "none";
-      document.getElementById("admin-panel").style.display = "block";
-      populateFeaturedDropdown();
-    } else {
-      document.getElementById("login-error").innerText = "Access denied.";
-    }
-  }
-
-  // Populate dropdown
-  function populateFeaturedDropdown() {
-    const sel = document.getElementById("homepage-featured");
-    sel.innerHTML = '<option value="">Select Featured Article</option>';
-    for (let id in articles) {
-      const opt = document.createElement("option");
-      opt.value = id;
-      opt.innerText = articles[id].title;
-      sel.appendChild(opt);
-    }
-  }
-
-  // Add Article
-  function addArticle() {
-    const id = document.getElementById("new-article-id").value.trim();
-    if (!id) { alert("ID required"); return; }
-
-    articles[id] = {
-      title: document.getElementById("new-article-title").value,
-      author: document.getElementById("new-article-author").value,
-      date: document.getElementById("new-article-date").value,
-      issue: document.getElementById("new-article-issue").value,
-      image: document.getElementById("new-article-image").value,
-      caption: document.getElementById("new-article-caption").value,
-      content: document.getElementById("new-article-content").value
-    };
-    alert(`Article "${articles[id].title}" added!`);
+function checkPassword() {
+  const input = document.getElementById("staff-password").value;
+  if(input === ADMIN_PASSWORD){
+    document.getElementById("login-section").style.display = "none";
+    document.getElementById("admin-panel").style.display = "block";
     populateFeaturedDropdown();
+  } else {
+    document.getElementById("login-error").innerText = "Access denied.";
   }
+}
 
-  // Add Staff
-  function addStaff() {
-    const name = document.getElementById("new-staff-name").value.trim();
-    const role = document.getElementById("new-staff-role").value.trim();
-    if (!name || !role) { alert("Fill both fields"); return; }
-    if (!window.staffList) window.staffList = [];
-    window.staffList.push({ name, role });
-    alert(`Staff member "${name}" added!`);
+function populateFeaturedDropdown() {
+  const sel = document.getElementById("homepage-featured");
+  sel.innerHTML = '<option value="">Select Featured Article</option>';
+  for (let id in articles) {
+    const opt = document.createElement("option");
+    opt.value = id;
+    opt.innerText = articles[id].title;
+    sel.appendChild(opt);
   }
+}
 
-  // Set Featured
-  function setFeaturedArticle() {
-    const id = document.getElementById("homepage-featured").value;
-    if (!id) { alert("Select an article"); return; }
-    localStorage.setItem("featuredArticle", id);
-    alert(`Featured article set to: "${articles[id].title}"`);
-  }
+function addArticle() {
+  const id = document.getElementById("new-article-id").value.trim();
+  if (!id) { alert("ID required"); return; }
 
-  // Unfeature
-  function unfeatureArticle() {
-    localStorage.removeItem("featuredArticle");
-    alert("Featured article removed from homepage.");
-  }
+  articles[id] = {
+    title: document.getElementById("new-article-title").value,
+    author: document.getElementById("new-article-author").value,
+    date: document.getElementById("new-article-date").value,
+    issue: document.getElementById("new-article-issue").value,
+    image: document.getElementById("new-article-image").value,
+    caption: document.getElementById("new-article-caption").value,
+    content: document.getElementById("new-article-content").value
+  };
+  alert(`Article "${articles[id].title}" added!`);
+  populateFeaturedDropdown();
+}
+
+function addStaff() {
+  const name = document.getElementById("new-staff-name").value.trim();
+  const role = document.getElementById("new-staff-role").value.trim();
+  if (!name || !role) { alert("Fill both fields"); return; }
+  if (!window.staffList) window.staffList = [];
+  window.staffList.push({ name, role });
+  alert(`Staff member "${name}" added!`);
+}
+
+function setFeaturedArticle() {
+  const id = document.getElementById("homepage-featured").value;
+  if (!id) { alert("Select an article"); return; }
+  localStorage.setItem("featuredArticle", id);
+  alert(`Featured article set to: "${articles[id].title}"`);
+}
+
+function unfeatureArticle() {
+  localStorage.removeItem("featuredArticle");
+  alert("Featured article removed from homepage.");
+}
 </script>
-
-</body>
-</html>

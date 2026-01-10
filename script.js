@@ -20,3 +20,7 @@ function renderArticles() {
       </div>`;
   });
 }
+// Redirect to article page
+function openArticle(id) {
+  window.location.href = `article.html?id=${id}`;
+}

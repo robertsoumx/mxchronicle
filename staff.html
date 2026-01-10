@@ -16,16 +16,17 @@
     <a href="index.html">Home</a>
     <a href="articles.html">Articles</a>
     <a href="about.html">About</a>
-    <a href="staff.html">Staff Portal</a>
+    <a href="staff.html" class="active">Staff Portal</a>
   </nav>
 </header>
 
 <main class="container">
+
   <h1>Staff Portal</h1>
 
-  <!-- Password input -->
+  <!-- Password section -->
   <div id="login-section">
-    <p>Enter the administrator password:</p>
+    <p>Enter administrator password:</p>
     <input type="password" id="staff-password" placeholder="Password">
     <button onclick="checkPassword()">Enter</button>
     <p id="login-error" style="color:red;"></p>
@@ -59,43 +60,49 @@
 
     <!-- Homepage Layout -->
     <section>
-      <h3>Homepage Layout Editor</h3>
-      <p>Drag and drop or rearrange articles on homepage (simplified for demo):</p>
+      <h3>Homepage Featured Article</h3>
       <select id="homepage-featured">
         <option value="">Select Featured Article</option>
       </select>
       <button onclick="setFeaturedArticle()">Set Featured</button>
+      <button onclick="unfeatureArticle()">Unfeature</button>
+      <p style="font-size:0.9rem;color:#555;">Setting featured article will update the homepage tile immediately.</p>
     </section>
   </div>
 
 </main>
 
 <script>
-  const ADMIN_PASSWORD = "26MXChronicles"; // Change this
+  const ADMIN_PASSWORD = "Lemon#0721";
 
+  // Login
   function checkPassword() {
-    const pwd = document.getElementById("staff-password").value;
-    if(pwd === ADMIN_PASSWORD){
+    const input = document.getElementById("staff-password").value;
+    if (input === ADMIN_PASSWORD) {
       document.getElementById("login-section").style.display = "none";
       document.getElementById("admin-panel").style.display = "block";
-
-      // Populate homepage featured selector
-      const sel = document.getElementById("homepage-featured");
-      sel.innerHTML = '<option value="">Select Featured Article</option>';
-      for(let id in articles){
-        const opt = document.createElement("option");
-        opt.value = id;
-        opt.innerText = articles[id].title;
-        sel.appendChild(opt);
-      }
+      populateFeaturedDropdown();
     } else {
-      document.getElementById("login-error").innerText = "Incorrect password!";
+      document.getElementById("login-error").innerText = "Access denied.";
     }
   }
 
+  // Populate dropdown
+  function populateFeaturedDropdown() {
+    const sel = document.getElementById("homepage-featured");
+    sel.innerHTML = '<option value="">Select Featured Article</option>';
+    for (let id in articles) {
+      const opt = document.createElement("option");
+      opt.value = id;
+      opt.innerText = articles[id].title;
+      sel.appendChild(opt);
+    }
+  }
+
+  // Add Article
   function addArticle() {
     const id = document.getElementById("new-article-id").value.trim();
-    if(!id) { alert("ID required"); return; }
+    if (!id) { alert("ID required"); return; }
 
     articles[id] = {
       title: document.getElementById("new-article-title").value,
@@ -107,25 +114,33 @@
       content: document.getElementById("new-article-content").value
     };
     alert(`Article "${articles[id].title}" added!`);
+    populateFeaturedDropdown();
   }
 
+  // Add Staff
   function addStaff() {
     const name = document.getElementById("new-staff-name").value.trim();
     const role = document.getElementById("new-staff-role").value.trim();
-    if(!name || !role){ alert("Fill both fields"); return; }
-
-    if(!window.staffList) window.staffList = [];
-    window.staffList.push({name, role});
+    if (!name || !role) { alert("Fill both fields"); return; }
+    if (!window.staffList) window.staffList = [];
+    window.staffList.push({ name, role });
     alert(`Staff member "${name}" added!`);
   }
 
+  // Set Featured
   function setFeaturedArticle() {
     const id = document.getElementById("homepage-featured").value;
-    if(!id) { alert("Select an article"); return; }
-    alert(`Homepage featured article set to: "${articles[id].title}"`);
-    // You can store this in localStorage if you want persistence
+    if (!id) { alert("Select an article"); return; }
     localStorage.setItem("featuredArticle", id);
+    alert(`Featured article set to: "${articles[id].title}"`);
+  }
+
+  // Unfeature
+  function unfeatureArticle() {
+    localStorage.removeItem("featuredArticle");
+    alert("Featured article removed from homepage.");
   }
 </script>
+
 </body>
 </html>

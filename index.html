@@ -5,59 +5,93 @@
   <title>MX Chronicles</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- External CSS -->
   <link rel="stylesheet" href="style.css" />
-
-  <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-  <header class="topbar">
-    <div class="logo">MX Chronicles</div>
-    <nav class="tabs">
-      <a href="#">Home</a>
-      <a href="#">About</a>
-      <a href="#">Articles</a>
-    </nav>
-  </header>
+<header class="topbar">
+  <div class="logo">MX Chronicles</div>
+  <nav class="tabs">
+    <button data-page="home" class="active">Home</button>
+    <button data-page="about">About</button>
+    <button data-page="magazine">Magazine</button>
+  </nav>
+</header>
 
-  <main class="grid">
-    <section class="tile large">
-      <h1>Independent Media in a Digital City</h1>
-      <p>Bold reporting. Modern voices. A new metro of ideas.</p>
-    </section>
+<main>
 
-    <section class="tile">
-      <h2>Politics</h2>
-      <p>Policy, power, and public life.</p>
-    </section>
+  <!-- HOME -->
+  <section id="home" class="page active">
+    <div class="grid">
+      <div class="tile large accent">
+        <h1>Independent Media for a New Metro Era</h1>
+        <p>Bold reporting across culture, power, and technology.</p>
+      </div>
 
-    <section class="tile accent">
-      <h2>Culture</h2>
-      <p>Art, media, and identity.</p>
-    </section>
+      <div class="tile dark">
+        <h2>Politics</h2>
+        <p>Policy, power, accountability.</p>
+      </div>
 
-    <section class="tile dark">
-      <h2>Technology</h2>
-      <p>The systems shaping tomorrow.</p>
-    </section>
+      <div class="tile">
+        <h2>Culture</h2>
+        <p>Art, identity, and media.</p>
+      </div>
 
-    <section class="tile">
-      <h2>Opinion</h2>
-      <p>Strong perspectives, clearly argued.</p>
-    </section>
+      <div class="tile accent">
+        <h2>Technology</h2>
+        <p>Systems shaping the future.</p>
+      </div>
+    </div>
+  </section>
 
-    <section class="tile accent">
-      <h2>Long Reads</h2>
-      <p>In-depth journalism that lasts.</p>
-    </section>
-  </main>
+  <!-- ABOUT -->
+  <section id="about" class="page">
+    <div class="about">
+      <h1>About MX Chronicles</h1>
+      <p>
+        MX Chronicles is an independent digital magazine focused on
+        metropolitan life, investigative journalism, and long-form analysis.
+      </p>
+      <p>
+        We publish work that values clarity, depth, and civic responsibility.
+      </p>
+    </div>
+  </section>
 
-  <footer>
-    2026 MX Chronicles · Built on GitHub Pages
-  </footer>
+  <!-- MAGAZINE -->
+  <section id="magazine" class="page">
+    <div class="grid">
+      <div class="tile large dark">
+        <h1>Featured Story</h1>
+        <p>The city as a system of power and people.</p>
+      </div>
 
+      <div class="tile">
+        <h2>Opinion</h2>
+        <p>Strong perspectives.</p>
+      </div>
+
+      <div class="tile accent">
+        <h2>Long Reads</h2>
+        <p>In-depth reporting.</p>
+      </div>
+
+      <div class="tile dark">
+        <h2>Archives</h2>
+        <p>Past issues & essays.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  © 2026 MX Chronicles · Built on GitHub Pages
+</footer>
+
+<script src="script.js"></script>
 </body>
 </html>

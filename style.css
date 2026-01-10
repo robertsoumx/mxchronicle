@@ -34,18 +34,18 @@ a { text-decoration:none; color:inherit; }
   color:#7b5e3c;
 }
 
-/* ARTICLES CONTAINER */
+/* ARTICLES CONTAINER - GRID */
 .articles-container {
   display:grid;
   gap:1.5rem;
 }
 
-/* HORIZONTAL ISSUE: articles side by side */
+/* Horizontal layout: side by side */
 .issue-horizontal .articles-container {
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
-/* VERTICAL ISSUE: articles stacked in columns */
+/* Vertical layout: stacked in single column */
 .issue-vertical .articles-container {
   grid-template-columns: 1fr;
 }

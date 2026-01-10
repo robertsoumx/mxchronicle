@@ -196,3 +196,51 @@ body {
   .article-container article h1 { font-size: 1.8rem; }
 }
 
+/* --------------------- */
+/* ABOUT PAGE */
+.about-container {
+  background: #fdf9f2;
+  padding: 2rem;
+  max-width: 900px;
+  margin: 2rem auto;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.about-text h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.about-text p {
+  font-family: 'Merriweather', serif;
+  line-height: 1.8;
+  font-size: 1rem;
+}
+
+.staff-list {
+  margin-top: 2rem;
+}
+
+.staff-list h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.staff-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.staff-list li {
+  font-family: 'Merriweather', serif;
+  font-size: 1rem;
+  margin-bottom: 0.8rem;
+}
+
+.staff-list .staff-name {
+  font-weight: bold;
+  color: #7b5e3c; /* stylized staff names */
+}

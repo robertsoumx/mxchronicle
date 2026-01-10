@@ -21,7 +21,7 @@ a { text-decoration:none; color:inherit; }
 
 /* ISSUE SECTION */
 .issue-section { width:100%; position:relative; margin-bottom:3rem; }
-.issue-overlay { background: rgba(255,250,240,0.9); padding:2rem 5%; border-radius:8px; }
+.issue-overlay { background: rgba(255,250,240,0.95); padding:2rem 5%; border-radius:8px; }
 
 /* ISSUE BANNER */
 .issue-banner h2 {
@@ -34,20 +34,14 @@ a { text-decoration:none; color:inherit; }
   color:#7b5e3c;
 }
 
-/* ARTICLES CONTAINER - GRID */
-.articles-container {
-  display:grid;
-  gap:1.5rem;
-}
-
-/* Horizontal layout: side by side */
-.issue-horizontal .articles-container {
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-}
-
-/* Vertical layout: stacked in single column */
-.issue-vertical .articles-container {
-  grid-template-columns: 1fr;
+/* ISSUE LAYOUT - Irregular Grid */
+.issue-layout {
+  display: grid;
+  grid-template-areas:
+    "feature feature side1"
+    "feature feature side2"
+    "side3 side4 side4";
+  grid-gap:1rem;
 }
 
 /* ARTICLE BLOCK */
@@ -67,8 +61,15 @@ a { text-decoration:none; color:inherit; }
 .article-block img { width:100%; max-height:250px; object-fit:cover; border-radius:5px; margin-bottom:0.5rem; }
 .article-block .synopsis { font-size:1rem; line-height:1.5; }
 
+/* GRID AREAS */
+.article-block[style*="feature"] { grid-area: feature; }
+.article-block[style*="side1"] { grid-area: side1; }
+.article-block[style*="side2"] { grid-area: side2; }
+.article-block[style*="side3"] { grid-area: side3; }
+.article-block[style*="side4"] { grid-area: side4; }
+
 /* Responsive */
 @media(max-width:900px){
-  .articles-container { grid-template-columns:1fr; }
+  .issue-layout { grid-template-areas: "feature" "side1" "side2" "side3" "side4"; grid-template-columns:1fr; }
   .nav-tabs a { display:block; margin:0.5rem 0; }
 }

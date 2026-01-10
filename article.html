@@ -3,51 +3,86 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MX Chronicles · Article</title>
+  <title>MX Chronicles · Articles</title>
   <link rel="stylesheet" href="style.css">
   <script src="articles.js" defer></script>
   <script src="script.js" defer></script>
 </head>
-<body onload="loadArticle()">
+<body onload="renderArticles()">
 
-<header class="site-header article-header">
+<!-- HEADER / NAV -->
+<header class="site-header">
   <div class="masthead">MX Chronicles</div>
   <nav class="nav-tabs">
     <a href="index.html">Home</a>
-    <a href="articles.html">Articles</a>
+    <a href="articles.html" class="active">Articles</a>
     <a href="about.html">About</a>
     <a href="staff.html">Staff Portal</a>
   </nav>
 </header>
 
-<main class="container article-container">
-  <article>
-    <h1 id="article-title"></h1>
-    <div class="meta" id="article-meta"></div>
-    <img id="article-image" alt="">
-    <div class="caption" id="article-caption"></div>
-    <div class="article-body" id="article-content"></div>
-  </article>
+<main class="container">
+
+  <!-- FILTER PANEL -->
+  <div class="filter-panel" style="margin-bottom:2rem; display:flex; flex-wrap:wrap; align-items:center; gap:1rem; background: rgba(255,250,240,0.95); padding:1rem; border-left:4px solid #7b5e3c; border-radius:5px; box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+    <label for="search" style="font-weight:bold;">Search:</label>
+    <input type="text" id="search" placeholder="Title, Author, Issue..." oninput="renderArticles()" style="flex:1; padding:0.5rem; border:1px solid #7b5e3c; border-radius:4px;">
+    
+    <label for="sort" style="font-weight:bold;">Sort by:</label>
+    <select id="sort" onchange="renderArticles()" style="padding:0.5rem; border:1px solid #7b5e3c; border-radius:4px;">
+      <option value="date">Date (Newest)</option>
+      <option value="title">Title</option>
+      <option value="author">Author</option>
+      <option value="issue">Issue</option>
+    </select>
+  </div>
+
+  <!-- ARTICLE LIST -->
+  <div id="article-list"></div>
+
 </main>
 
 <script>
-function loadArticle() {
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("id");
+function renderArticles() {
+  const searchValue = document.getElementById('search').value.toLowerCase();
+  const sortValue = document.getElementById('sort').value;
 
-  if(!id || !articles[id]){
-    document.getElementById("article-title").innerText = "404 - Article Not Found";
-    document.getElementById("article-content").innerHTML = "<p>Article not found.</p>";
-    return;
+  const listContainer = document.getElementById('article-list');
+  listContainer.innerHTML = '';
+
+  let sortedArticles = Object.entries(articles);
+
+  // Filter by search
+  if(searchValue){
+    sortedArticles = sortedArticles.filter(([id, a]) =>
+      a.title.toLowerCase().includes(searchValue) ||
+      a.author.toLowerCase().includes(searchValue) ||
+      (a.issue && a.issue.toLowerCase().includes(searchValue))
+    );
   }
 
-  const a = articles[id];
-  document.getElementById("article-title").innerText = a.title;
-  document.getElementById("article-meta").innerText = `${a.author} · ${a.date} · ${a.issue || ''}`;
-  document.getElementById("article-image").src = a.image || "";
-  document.getElementById("article-image").alt = a.title;
-  document.getElementById("article-caption").innerText = a.caption || "";
-  document.getElementById("article-content").innerHTML = a.content || "";
+  // Sort
+  sortedArticles.sort(([, a], [, b]) => {
+    if(sortValue === 'date') return new Date(b.date) - new Date(a.date);
+    if(sortValue === 'title') return a.title.localeCompare(b.title);
+    if(sortValue === 'author') return a.author.localeCompare(b.author);
+    if(sortValue === 'issue') return (a.issue || '').localeCompare(b.issue || '');
+  });
+
+  // Render as newspaper-style sections
+  sortedArticles.forEach(([id, a], index) => {
+    const div = document.createElement('div');
+    div.className = 'article-section';
+    div.style.background = index % 2 === 0 ? 'rgba(255,250,240,0.95)' : 'rgba(255,245,235,0.95)';
+    div.onclick = () => openArticle(id);
+    div.innerHTML = `
+      <h2>${a.title}</h2>
+      <div class="meta">${a.author} · ${a.date} · ${a.issue || ''}</div>
+      ${a.image ? `<img src="${a.image}" alt="${a.title}">` : ''}
+      <p class="synopsis">${a.content.substring(0, 200)}...</p>
+    `;
+    listContainer.appendChild(div);
+  });
 }
 </script>
 

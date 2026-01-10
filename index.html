@@ -21,7 +21,7 @@
 </header>
 
 <main id="home-container">
-  <!-- Home issues and articles will render here -->
+  <!-- Issue sections will render here -->
 </main>
 
 <script>
@@ -40,7 +40,6 @@ function renderHome() {
   issueKeys.forEach((issueNum, idx) => {
     const section = document.createElement('section');
     section.className = 'issue-section';
-    // Assign horizontal or vertical layout per issue
     section.classList.add(idx % 2 === 0 ? 'issue-horizontal' : 'issue-vertical');
     section.style.backgroundImage = `url('https://picsum.photos/1200/250?grayscale&random=${idx}')`;
     section.style.backgroundSize = 'cover';

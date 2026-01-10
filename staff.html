@@ -8,253 +8,133 @@
   <script src="articles.js" defer></script>
   <script src="script.js" defer></script>
 </head>
-<body>
+<body onload="showStaffLogin()">
 
 <header class="site-header">
-  <div class="masthead">MX Chronicles</div>
+  <div class="masthead">MX CHRONICLES</div>
   <nav class="nav-tabs">
-    <a href="index.html">Home</a>
-    <a href="articles.html">Articles</a>
-    <a href="about.html">About</a>
-    <a href="staff.html" class="active">Staff Portal</a>
+    <a href="index.html">HOME</a>
+    <a href="articles.html">ARTICLES</a>
+    <a href="about.html">ABOUT</a>
+    <a href="staff.html" class="active">STAFF PORTAL</a>
   </nav>
 </header>
 
-<main class="container">
-
-  <h1>Staff Portal</h1>
-
-  <!-- LOGIN -->
-  <div id="login-section">
-    <p>Enter administrator password:</p>
-    <input type="password" id="staff-password" placeholder="Password">
-    <button onclick="checkPassword()">Enter</button>
-    <p id="login-error" style="color:red;"></p>
-  </div>
-
-  <!-- ADMIN PANEL -->
-  <div id="admin-panel" style="display:none;">
-    <h2>Welcome, Admin!</h2>
-
-    <!-- MANAGE ARTICLE -->
-    <section>
-      <h3>Manage Articles</h3>
-      
-      <!-- Select existing article -->
-      <label for="article-select">Select Existing Article:</label>
-      <select id="article-select" onchange="loadArticleForEdit()">
-        <option value="">-- Select Article --</option>
-      </select>
-
-      <p>Or enter a new ID to add a new article:</p>
-      <input type="text" id="new-article-id" placeholder="Unique Article ID"><br>
-    
-      <input type="text" id="new-article-title" placeholder="Title"><br>
-      <input type="text" id="new-article-author" placeholder="Author"><br>
-      <input type="text" id="new-article-date" placeholder="Date"><br>
-      <input type="text" id="new-article-issue" placeholder="Issue"><br>
-      <input type="text" id="new-article-image" placeholder="Image URL"><br>
-      <input type="text" id="new-article-caption" placeholder="Caption"><br>
-      <textarea id="new-article-content" placeholder="Article content HTML"></textarea><br>
-    
-      <button onclick="addOrUpdateArticle()">Add / Update Article</button>
-      <button onclick="deleteArticle()">Delete Article</button>
-</section>
-
-
-    <!-- STAFF MANAGEMENT -->
-    <section>
-      <h3>Manage Staff</h3>
-      <input type="text" id="new-staff-name" placeholder="Staff Name">
-      <input type="text" id="new-staff-role" placeholder="Role">
-      <button onclick="addStaff()">Add Staff</button>
-
-      <h4>Current Staff</h4>
-      <ul id="staff-list-container"></ul>
-    </section>
-
-    <!-- FEATURED ARTICLE -->
-    <section>
-      <h3>Homepage Featured Article</h3>
-      <select id="homepage-featured">
-        <option value="">Select Featured Article</option>
-      </select>
-      <button onclick="setFeaturedArticle()">Set Featured</button>
-      <button onclick="unfeatureArticle()">Unfeature</button>
-      <p style="font-size:0.9rem;color:#555;">Setting featured article will update the homepage tile immediately.</p>
-    </section>
-
-  </div>
-
+<main id="staff-container">
+  <!-- Login or portal UI appears here -->
 </main>
 
 <script>
-const ADMIN_PASSWORD = "26MXChronicles";
+const STAFF_PASSWORD = "26MXChronicles";
 
-// Staff list stored in memory (can initialize empty or pre-populated)
-let staffList = [
-  { name: "Alice Montgomery", role: "Editor-in-Chief" },
-  { name: "Johnathan Doe", role: "Historical Researcher" },
-  { name: "Celine Wright", role: "Layout & Design" },
-  { name: "David Roberts", role: "Photography" },
-  { name: "Robert Sou", role: "Contributor" }
-];
+// Show login form
+function showStaffLogin() {
+  const container = document.getElementById('staff-container');
+  container.innerHTML = `
+    <section class="issue-section">
+      <div class="issue-overlay">
+        <h2>STAFF PORTAL LOGIN</h2>
+        <input type="password" id="staff-pass" placeholder="Enter password" style="padding:0.5rem; font-size:1rem; width:200px;">
+        <button onclick="checkStaffPassword()" style="padding:0.5rem 1rem; margin-left:0.5rem;">Enter</button>
+        <div id="staff-error" style="color:red; margin-top:0.5rem;"></div>
+      </div>
+    </section>
+  `;
+}
 
-function checkPassword() {
-  const input = document.getElementById("staff-password").value;
-  if(input === ADMIN_PASSWORD){
-  document.getElementById("login-section").style.display = "none";
-  document.getElementById("admin-panel").style.display = "block";
-  populatePortalDropdowns();
-  renderStaffList();
+// Check password
+function checkStaffPassword() {
+  const pass = document.getElementById('staff-pass').value;
+  if(pass === STAFF_PASSWORD){
+    renderStaffPortal();
+  } else {
+    document.getElementById('staff-error').innerText = "Incorrect password";
   }
 }
 
-// ADD ARTICLE
-function addArticle() {
-  const id = document.getElementById("new-article-id").value.trim();
-  if (!id) { alert("ID required"); return; }
-
-  articles[id] = {
-    title: document.getElementById("new-article-title").value,
-    author: document.getElementById("new-article-author").value,
-    date: document.getElementById("new-article-date").value,
-    issue: document.getElementById("new-article-issue").value,
-    image: document.getElementById("new-article-image").value,
-    caption: document.getElementById("new-article-caption").value,
-    content: document.getElementById("new-article-content").value
-  };
-  alert(`Article "${articles[id].title}" added!`);
-  populateFeaturedDropdown();
-}
-
-// ADD STAFF
-function addStaff() {
-  const name = document.getElementById("new-staff-name").value.trim();
-  const role = document.getElementById("new-staff-role").value.trim();
-  if (!name || !role) { alert("Fill both fields"); return; }
-  staffList.push({ name, role });
-  renderStaffList();
-  alert(`Staff member "${name}" added!`);
-  document.getElementById("new-staff-name").value = '';
-  document.getElementById("new-staff-role").value = '';
-}
-
-// REMOVE STAFF
-function removeStaff(index) {
-  if(confirm(`Remove staff member "${staffList[index].name}"?`)){
-    staffList.splice(index, 1);
-    renderStaffList();
-  }
-}
-
-// RENDER STAFF LIST
-function renderStaffList() {
-  const container = document.getElementById("staff-list-container");
+// Render portal UI
+function renderStaffPortal() {
+  const container = document.getElementById('staff-container');
   container.innerHTML = '';
-  staffList.forEach((s,i) => {
-    const li = document.createElement('li');
-    li.innerHTML = `<strong>${s.name}</strong> – ${s.role} <button onclick="removeStaff(${i})">Remove</button>`;
-    container.appendChild(li);
+
+  // ARTICLES MANAGEMENT
+  const articleSection = document.createElement('section');
+  articleSection.className = 'issue-section';
+  articleSection.innerHTML = `<div class="issue-overlay"><h2>MANAGE ARTICLES</h2></div>`;
+  const articleContainer = document.createElement('div');
+  articleContainer.className = 'articles-container issue-layout';
+  for(const [id,a] of Object.entries(articles)){
+    const art = document.createElement('div');
+    art.className = 'article-block';
+    art.innerHTML = `
+      <h3 class="article-title">${a.title}</h3>
+      <div class="meta">${a.author} · ${a.date}</div>
+      <p style="font-size:0.9rem; margin-top:0.5rem;">
+        <button onclick="editArticle('${id}')">Edit</button>
+        <button onclick="deleteArticle('${id}')">Delete</button>
+        <button onclick="toggleFeature('${id}')">${a.featured?'Unfeature':'Feature'}</button>
+      </p>
+    `;
+    articleContainer.appendChild(art);
+  }
+  articleSection.querySelector('.issue-overlay').appendChild(articleContainer);
+  container.appendChild(articleSection);
+
+  // STAFF MANAGEMENT
+  const staffSection = document.createElement('section');
+  staffSection.className = 'issue-section';
+  staffSection.innerHTML = `
+    <div class="issue-overlay">
+      <h2>MANAGE STAFF</h2>
+      <input type="text" id="new-staff" placeholder="Add staff member" style="padding:0.5rem; width:200px;">
+      <button onclick="addStaff()">Add</button>
+      <div id="staff-list"></div>
+    </div>
+  `;
+  container.appendChild(staffSection);
+  renderStaffList();
+}
+
+// STAFF MANAGEMENT FUNCTIONS
+function renderStaffList() {
+  const listContainer = document.getElementById('staff-list');
+  listContainer.innerHTML = '';
+  staff.forEach((s,i)=>{
+    const div = document.createElement('div');
+    div.style.margin = '0.5rem 0';
+    div.innerHTML = `${s} <button onclick="removeStaff(${i})">Remove</button>`;
+    listContainer.appendChild(div);
   });
 }
 
-// FEATURED ARTICLE
-function populateFeaturedDropdown() {
-  const sel = document.getElementById("homepage-featured");
-  sel.innerHTML = '<option value="">Select Featured Article</option>';
-  for (let id in articles) {
-    const opt = document.createElement("option");
-    opt.value = id;
-    opt.innerText = articles[id].title;
-    sel.appendChild(opt);
-  }
+function addStaff() {
+  const name = document.getElementById('new-staff').value.trim();
+  if(name){ staff.push(name); renderStaffList(); document.getElementById('new-staff').value=''; }
 }
 
-function setFeaturedArticle() {
-  const id = document.getElementById("homepage-featured").value;
-  if (!id) { alert("Select an article"); return; }
-  localStorage.setItem("featuredArticle", id);
-  alert(`Featured article set to: "${articles[id].title}"`);
+function removeStaff(idx){
+  staff.splice(idx,1);
+  renderStaffList();
 }
 
-function unfeatureArticle() {
-  localStorage.removeItem("featuredArticle");
-  alert("Featured article removed from homepage.");
+// ARTICLE MANAGEMENT FUNCTIONS
+function editArticle(id){
+  const newTitle = prompt("Enter new title", articles[id].title);
+  if(newTitle) articles[id].title = newTitle;
+  renderStaffPortal();
 }
 
-function populateArticleSelect() {
-  const sel = document.getElementById("article-select");
-  sel.innerHTML = '<option value="">-- Select Article --</option>';
-  for (let id in articles) {
-    const opt = document.createElement("option");
-    opt.value = id;
-    opt.innerText = articles[id].title;
-    sel.appendChild(opt);
-  }
-}
-
-// Load selected article into form
-function loadArticleForEdit() {
-  const sel = document.getElementById("article-select");
-  const id = sel.value;
-  if(!id || !articles[id]) return;
-
-  const a = articles[id];
-  document.getElementById("new-article-id").value = id;
-  document.getElementById("new-article-title").value = a.title;
-  document.getElementById("new-article-author").value = a.author;
-  document.getElementById("new-article-date").value = a.date;
-  document.getElementById("new-article-issue").value = a.issue;
-  document.getElementById("new-article-image").value = a.image;
-  document.getElementById("new-article-caption").value = a.caption;
-  document.getElementById("new-article-content").value = a.content;
-}
-
-// Add or update article
-function addOrUpdateArticle() {
-  const id = document.getElementById("new-article-id").value.trim();
-  if(!id) { alert("ID required"); return; }
-
-  articles[id] = {
-    title: document.getElementById("new-article-title").value,
-    author: document.getElementById("new-article-author").value,
-    date: document.getElementById("new-article-date").value,
-    issue: document.getElementById("new-article-issue").value,
-    image: document.getElementById("new-article-image").value,
-    caption: document.getElementById("new-article-caption").value,
-    content: document.getElementById("new-article-content").value
-  };
-
-  alert(`Article "${articles[id].title}" has been added/updated!`);
-  populateArticleSelect();
-  populateFeaturedDropdown();
-}
-
-// Delete selected article
-function deleteArticle() {
-  const id = document.getElementById("article-select").value;
-  if(!id || !articles[id]) { alert("Select an article to delete."); return; }
-  if(confirm(`Are you sure you want to delete "${articles[id].title}"?`)) {
+function deleteArticle(id){
+  if(confirm("Delete this article?")) {
     delete articles[id];
-    alert("Article deleted!");
-    document.getElementById("article-select").value = '';
-    document.getElementById("new-article-id").value = '';
-    document.getElementById("new-article-title").value = '';
-    document.getElementById("new-article-author").value = '';
-    document.getElementById("new-article-date").value = '';
-    document.getElementById("new-article-issue").value = '';
-    document.getElementById("new-article-image").value = '';
-    document.getElementById("new-article-caption").value = '';
-    document.getElementById("new-article-content").value = '';
-    populateArticleSelect();
-    populateFeaturedDropdown();
+    renderStaffPortal();
   }
 }
 
-// Ensure dropdowns populate after login
-function populatePortalDropdowns() {
-  populateArticleSelect();
-  populateFeaturedDropdown();
+function toggleFeature(id){
+  articles[id].featured = !articles[id].featured;
+  renderStaffPortal();
 }
 </script>
+</body>
+</html>

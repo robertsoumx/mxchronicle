@@ -21,7 +21,7 @@
 </header>
 
 <main id="home-container">
-  <!-- Issue sections will render here -->
+  <!-- Dynamic issue sections will render here -->
 </main>
 
 <script>
@@ -40,7 +40,6 @@ function renderHome() {
   issueKeys.forEach((issueNum, idx) => {
     const section = document.createElement('section');
     section.className = 'issue-section';
-    section.classList.add(idx % 2 === 0 ? 'issue-horizontal' : 'issue-vertical');
     section.style.backgroundImage = `url('https://picsum.photos/1200/250?grayscale&random=${idx}')`;
     section.style.backgroundSize = 'cover';
     section.style.backgroundPosition = 'center';
@@ -53,28 +52,33 @@ function renderHome() {
     issueHeader.innerHTML = `<h2>ISSUE ${issueNum}</h2>`;
     overlay.appendChild(issueHeader);
 
-    const articlesContainer = document.createElement('div');
-    articlesContainer.className = 'articles-container';
+    const layout = document.createElement('div');
+    layout.className = 'issue-layout';
 
-    issues[issueNum].forEach(article => {
-      const art = document.createElement('div');
-      art.className = 'article-block';
-      art.onclick = ()=>openArticle(article.id);
-      art.innerHTML = `
+    // Assign grid areas dynamically for irregular layout
+    const articleKeys = Object.keys(issues[issueNum]);
+    articleKeys.forEach((key, i) => {
+      const article = issues[issueNum][key];
+      const artDiv = document.createElement('div');
+      artDiv.className = 'article-block';
+      artDiv.onclick = ()=>openArticle(article.id);
+      artDiv.innerHTML = `
         <h3 class="article-title">${article.title}</h3>
         <div class="meta">${article.author} · ${article.date}</div>
         ${article.image ? `<img src="${article.image}" alt="${article.title}">` : ''}
         <p class="synopsis">${article.content.substring(0,200)}...</p>
       `;
-      articlesContainer.appendChild(art);
+      // Assign grid areas to create irregular layout
+      const areas = ['feature', 'side1', 'side2', 'side3', 'side4'];
+      artDiv.style.gridArea = areas[i % areas.length];
+      layout.appendChild(artDiv);
     });
 
-    overlay.appendChild(articlesContainer);
+    overlay.appendChild(layout);
     section.appendChild(overlay);
     container.appendChild(section);
   });
 }
 </script>
-
 </body>
 </html>

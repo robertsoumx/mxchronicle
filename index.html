@@ -4,19 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MX Chronicles · Home</title>
-
-  <!-- CSS -->
   <link rel="stylesheet" href="style.css">
-
-  <!-- JS -->
   <script src="articles.js" defer></script>
   <script src="script.js" defer></script>
 </head>
-<body>
+<body onload="renderHome()">
 
-<!-- HEADER / NAV -->
 <header class="site-header">
-  <div class="masthead">MX Chronicles</div>
+  <div class="masthead">MX CHRONICLES</div>
   <nav class="nav-tabs">
     <a href="index.html" class="active">Home</a>
     <a href="articles.html">Articles</a>
@@ -25,48 +20,56 @@
   </nav>
 </header>
 
-<!-- MAIN CONTENT -->
-<main class="container home-grid" id="homepage-articles"></main>
+<main class="container" id="home-container">
+  <!-- Home sections will be dynamically generated here -->
+</main>
 
 <script>
-function renderHomepage() {
-  const container = document.getElementById("homepage-articles");
+function renderHome() {
+  const container = document.getElementById('home-container');
   container.innerHTML = '';
 
-  const featuredId = localStorage.getItem("featuredArticle");
-  let featuredArticle = featuredId ? articles[featuredId] : null;
-
-  // Featured tile
-  if(featuredArticle){
-    const div = document.createElement("div");
-    div.className = "home-feature";
-    div.onclick = () => openArticle(featuredId);
-    div.innerHTML = `
-      <h2>${featuredArticle.title}</h2>
-      <div class="meta">${featuredArticle.author} · ${featuredArticle.date} · ${featuredArticle.issue || ''}</div>
-      <p class="synopsis">${featuredArticle.content.substring(0, 120)}...</p>
-      <img src="${featuredArticle.image}" alt="${featuredArticle.title}">
-    `;
-    container.appendChild(div);
+  // Group articles by issue
+  const issues = {};
+  for(const [id,a] of Object.entries(articles)){
+    if(!issues[a.issue]) issues[a.issue] = [];
+    issues[a.issue].push({...a, id});
   }
 
-  // Other articles
-  for(let id in articles){
-    if(id === featuredId) continue;
-    const a = articles[id];
-    const div = document.createElement("div");
-    div.className = "home-article";
-    div.onclick = () => openArticle(id);
-    div.innerHTML = `
-      <h2>${a.title}</h2>
-      <div class="meta">${a.author} · ${a.date} · ${a.issue || ''}</div>
-      <p class="synopsis">${a.content.substring(0, 100)}...</p>
-      <img src="${a.image}" alt="${a.title}">
-    `;
-    container.appendChild(div);
-  }
+  // Sort issues descending
+  const issueKeys = Object.keys(issues).sort((a,b)=> b-a);
+
+  issueKeys.forEach(issueNum=>{
+    const section = document.createElement('section');
+    section.className = 'issue-section';
+
+    // Issue header
+    const issueHeader = document.createElement('div');
+    issueHeader.className = 'issue-header';
+    issueHeader.innerHTML = `<h2>ISSUE ${issueNum}</h2>`;
+    section.appendChild(issueHeader);
+
+    // Horizontal topics container
+    const topicsContainer = document.createElement('div');
+    topicsContainer.className = 'topics-container';
+
+    issues[issueNum].forEach(article=>{
+      const articleDiv = document.createElement('div');
+      articleDiv.className = 'home-article';
+      articleDiv.onclick = () => openArticle(article.id);
+      articleDiv.innerHTML = `
+        <h3 class="article-title">${article.title.toUpperCase()}</h3>
+        <div class="meta">${article.author} · ${article.date}</div>
+        ${article.image ? `<img src="${article.image}" alt="${article.title}">` : ''}
+        <p class="synopsis">${article.content.substring(0,150)}...</p>
+      `;
+      topicsContainer.appendChild(articleDiv);
+    });
+
+    section.appendChild(topicsContainer);
+    container.appendChild(section);
+  });
 }
-document.addEventListener("DOMContentLoaded", renderHomepage);
 </script>
 
 </body>

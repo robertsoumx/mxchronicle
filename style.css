@@ -1,99 +1,73 @@
-/* GLOBAL */
+/* --- Global --- */
 body {
   margin: 0;
   font-family: 'Merriweather', serif;
+  background: url('https://www.transparenttextures.com/patterns/old-mathematics.png') repeat;
   color: #2c2c2c;
   line-height: 1.7;
-  background: url('https://www.transparenttextures.com/patterns/old-mathematics.png') repeat;
 }
-
 a { text-decoration: none; color: inherit; }
 
-/* HEADER / NAV */
+/* Header */
 .site-header {
   background: url('https://www.transparenttextures.com/patterns/papyrus.png') repeat;
-  padding: 1.5rem 0;
-  border-bottom: 4px solid #7b5e3c;
+  padding: 2rem 0;
   text-align: center;
+  border-bottom: 4px solid #7b5e3c;
 }
 .masthead {
   font-family: 'Playfair Display', serif;
-  font-size: 3.2rem;
+  font-size: 3.5rem;
   letter-spacing: 0.08em;
-  margin-bottom: 0.5rem;
   text-transform: uppercase;
 }
 .nav-tabs a {
   margin: 0 2rem;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: bold;
-  letter-spacing: 0.05em;
   border-bottom: 3px solid transparent;
   padding-bottom: 0.2rem;
-  transition: all 0.2s ease;
+  transition: all 0.2s;
 }
-.nav-tabs a:hover, .nav-tabs a.active { border-bottom: 3px solid #7b5e3c; }
+.nav-tabs a.active, .nav-tabs a:hover { border-bottom:3px solid #7b5e3c; }
 
-/* ISSUE SECTION */
+/* Issue Section (Full-Width) */
 .issue-section {
+  width: 100%;
   position: relative;
-  margin: 2rem 0;
-  padding: 2rem;
-  color: #2c2c2c;
-  border-radius: 8px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  margin-bottom: 3rem;
 }
 .issue-overlay {
-  background: rgba(255, 250, 240, 0.85);
-  padding: 2rem;
-  border-radius: 8px;
+  background: rgba(255,250,240,0.85);
+  padding: 2rem 5%;
 }
 
-/* ISSUE HEADER */
-.issue-header h2 {
+/* Issue Banner */
+.issue-banner h2 {
   font-family: 'Playfair Display', serif;
-  font-size: 2.4rem;
-  letter-spacing: 0.05em;
+  font-size: 2.5rem;
   text-transform: uppercase;
   border-bottom: 2px solid #c9b79c;
   padding-bottom: 0.25rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  color: #7b5e3c;
 }
 
-/* ARTICLES INSIDE ISSUE */
+/* Articles inside issue */
 .article-row {
-  margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
+  margin-bottom: 2rem;
   border-bottom: 1px dashed #c9b79c;
+  padding-bottom: 1rem;
   cursor: pointer;
 }
-.article-row:hover {
-  background: rgba(245, 235, 220, 0.7);
-}
+.article-row:hover { background: rgba(245,235,220,0.7); }
+
 .article-title {
   font-family: 'Playfair Display', serif;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   text-transform: uppercase;
   margin-bottom: 0.3rem;
 }
-.article-row .meta {
-  font-size: 0.9rem;
-  color: #555;
-  margin-bottom: 0.5rem;
-}
-.article-row img {
-  width: 100%;
-  max-height: 200px;
-  object-fit: cover;
-  border-radius: 5px;
-  margin-bottom: 0.5rem;
-}
-.article-row .synopsis {
-  font-size: 1rem;
-  line-height: 1.5;
-}
-
-/* Responsive */
-@media(max-width:900px){
-  .nav-tabs a { display:block; margin:0.5rem 0; }
-}
+.article-row .meta { font-size:0.9rem; color:#555; margin-bottom:0.5rem; }
+.article-row img { width:100%; max-height:250px; object-fit:cover; border-radius:5px; margin-bottom:0.5rem; }
+.article-row .synopsis { font-size:1rem; line-height:1.6; }

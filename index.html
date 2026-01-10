@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>MX Chronicles</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MX Chronicles · Home</title>
+  <link rel="stylesheet" href="style.css">
   <script src="articles.js" defer></script>
   <script src="script.js" defer></script>
 </head>
-
 <body>
-<header class="home">
-  <div class="logo">MX Chronicles</div>
-</header>
 
+<!-- HEADER -->
 <header class="site-header">
   <div class="masthead">MX Chronicles</div>
   <nav class="nav-tabs">
@@ -22,61 +20,41 @@
   </nav>
 </header>
 
+<!-- MAIN CONTENT -->
+<main class="container home-grid">
 
-<main class="container">
-  <div class="grid">
-
-    <!-- FEATURED ARTICLE -->
-    <div class="tile featured"
-         style="background-image:url('https://images.unsplash.com/photo-1549893074-0a6bcd4f6f52');"
-         onclick="openArticle('industrial-cities')">
-
-      <div class="title large">THE RISE OF INDUSTRIAL CITIES</div>
-
-      <div class="meta">
-        MX Chronicles Staff · March 1892
-      </div>
-
-      <div class="synopsis">
-        How factories, railroads, and migration reshaped the social and political
-        order of the modern world.
-      </div>
-    </div>
-
-    <!-- STANDARD ARTICLE -->
-    <div class="tile"
-         onclick="openArticle('ancient-trade')">
-
-      <div class="title">ANCIENT TRADE ROUTES</div>
-
-      <div class="meta">
-        Historical Desk · 120 BCE
-      </div>
-
-      <div class="synopsis">
-        The forgotten highways that connected empires through commerce,
-        culture, and ideas.
-      </div>
-    </div>
-
-    <!-- ANOTHER ARTICLE -->
-    <div class="tile"
-         onclick="openArticle('industrial-cities')">
-
-      <div class="title">URBAN LIFE AND LABOR</div>
-
-      <div class="meta">
-        MX Chronicles · 1887
-      </div>
-
-      <div class="synopsis">
-        Daily life inside the factories and tenements of the 19th century metropolis.
-      </div>
-    </div>
-
+  <!-- FEATURED ARTICLE -->
+  <div class="home-feature" onclick="openArticle('industrial-cities')">
+    <h2>THE RISE OF INDUSTRIAL CITIES</h2>
+    <div class="meta">MX Chronicles Staff · March 1892 · Vol.1, No.2</div>
+    <p class="synopsis">
+      How factories, railroads, and migration reshaped the social and political
+      order of the modern world.
+    </p>
+    <img src="https://images.unsplash.com/photo-1549893074-0a6bcd4f6f52" alt="Industrial City">
   </div>
+
+  <!-- SECOND ARTICLE -->
+  <div class="home-article" onclick="openArticle('ancient-trade')">
+    <h2>ANCIENT TRADE ROUTES</h2>
+    <div class="meta">Historical Desk · 120 BCE · Vol.1, No.1</div>
+    <p class="synopsis">
+      The forgotten highways that connected empires through commerce, culture, and ideas.
+    </p>
+    <img src="https://images.unsplash.com/photo-1518182230945-b1bbd7761f31" alt="Ancient Trade">
+  </div>
+
+  <!-- THIRD ARTICLE -->
+  <div class="home-article" onclick="openArticle('industrial-cities')">
+    <h2>URBAN LIFE AND LABOR</h2>
+    <div class="meta">MX Chronicles Staff · 1887 · Vol.1, No.1</div>
+    <p class="synopsis">
+      Daily life inside the factories and tenements of the 19th century metropolis.
+    </p>
+    <img src="https://images.unsplash.com/photo-1542838132-92c53300491e" alt="Urban Labor">
+  </div>
+
 </main>
 
-<footer>© 2026 MX Chronicles</footer>
 </body>
 </html>

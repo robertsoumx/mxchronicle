@@ -1,2 +1,2 @@
-# mxchronicles.github.io
-This is the MXChronicles website.
+# mxchronicle.github.io
+This is the MXChronicle website.

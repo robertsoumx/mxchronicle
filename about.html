@@ -5,45 +5,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MX Chronicles · About</title>
   <link rel="stylesheet" href="style.css">
+  <script src="data.js" defer></script>
 </head>
 <body>
-
-<!-- HEADER / NAV -->
 <header class="site-header">
-  <div class="masthead">MX Chronicles</div>
+  <div class="masthead">MX CHRONICLES</div>
   <nav class="nav-tabs">
-    <a href="index.html">Home</a>
-    <a href="articles.html">Articles</a>
-    <a href="about.html" class="active">About</a>
-    <a href="staff.html">Staff Portal</a>
+    <a href="index.html">HOME</a>
+    <a href="articles.html">ARTICLES</a>
+    <a href="about.html" class="active">ABOUT</a>
+    <a href="staff.html">STAFF PORTAL</a>
   </nav>
 </header>
 
-<!-- MAIN CONTENT -->
-<main class="container about-container">
-
-  <section class="about-text">
-    <h1>About MX Chronicles</h1>
-    <p>
-      MX Chronicles is a historical magazine dedicated to chronicling the evolution of societies, industries,
-      and urban life across time. From ancient trade routes to modern industrial cities, we bring the past
-      alive with vivid stories, images, and research. Our mission is to preserve history while providing
-      insightful perspectives for curious minds.
-    </p>
+<main id="about-container">
+  <section class="issue-section">
+    <div class="issue-overlay">
+      <h2>ABOUT MX CHRONICLES</h2>
+      <p>MX Chronicles is a historical journal dedicated to uncovering the past with in-depth articles and essays.</p>
+      <h3>STAFF</h3>
+      <div id="about-staff-list"></div>
+    </div>
   </section>
-
-  <section class="staff-list">
-    <h2>Our Staff</h2>
-    <ul>
-      <li><span class="staff-name">Alice Montgomery</span> – Editor-in-Chief</li>
-      <li><span class="staff-name">Johnathan Doe</span> – Historical Researcher</li>
-      <li><span class="staff-name">Celine Wright</span> – Layout & Design</li>
-      <li><span class="staff-name">David Roberts</span> – Photography</li>
-      <li><span class="staff-name">Robert Sou</span> – Contributor</li>
-    </ul>
-  </section>
-
 </main>
 
+<script>
+function renderAboutStaff(){
+  const listContainer=document.getElementById('about-staff-list');
+  listContainer.innerHTML='';
+  staff.forEach(name=>{
+    const div=document.createElement('div');
+    div.className='staff-name';
+    div.textContent=name;
+    listContainer.appendChild(div);
+  });
+}
+renderAboutStaff();
+</script>
 </body>
 </html>

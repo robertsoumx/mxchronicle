@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MX Chronicles · Home</title>
   <link rel="stylesheet" href="style.css">
-  <script src="articles.js" defer></script>
+  <script src="data.js" defer></script>
   <script src="script.js" defer></script>
 </head>
 <body onload="renderHome()">
@@ -21,56 +21,55 @@
 </header>
 
 <main id="home-container">
-  <!-- Dynamic issue sections will render here -->
+  <!-- Issues rendered dynamically -->
 </main>
 
 <script>
-function renderHome() {
+function renderHome(){
   const container = document.getElementById('home-container');
   container.innerHTML = '';
 
+  // group articles by issue
   const issues = {};
   for(const [id,a] of Object.entries(articles)){
     if(!issues[a.issue]) issues[a.issue] = [];
-    issues[a.issue].push({...a, id});
+    issues[a.issue].push({...a,id});
   }
 
   const issueKeys = Object.keys(issues).sort((a,b)=> b-a);
 
-  issueKeys.forEach((issueNum, idx) => {
+  issueKeys.forEach((issueNum, idx)=>{
     const section = document.createElement('section');
-    section.className = 'issue-section';
-    section.style.backgroundImage = `url('https://picsum.photos/1200/250?grayscale&random=${idx}')`;
-    section.style.backgroundSize = 'cover';
-    section.style.backgroundPosition = 'center';
+    section.className='issue-section';
+    section.style.backgroundImage=`url('https://picsum.photos/1200/250?grayscale&random=${idx}')`;
+    section.style.backgroundSize='cover';
+    section.style.backgroundPosition='center';
 
     const overlay = document.createElement('div');
-    overlay.className = 'issue-overlay';
+    overlay.className='issue-overlay';
 
-    const issueHeader = document.createElement('div');
-    issueHeader.className = 'issue-banner';
-    issueHeader.innerHTML = `<h2>ISSUE ${issueNum}</h2>`;
-    overlay.appendChild(issueHeader);
+    const banner = document.createElement('div');
+    banner.className='issue-banner';
+    banner.innerHTML=`<h2>ISSUE ${issueNum}</h2>`;
+    overlay.appendChild(banner);
 
+    // irregular layout using CSS grid
     const layout = document.createElement('div');
-    layout.className = 'issue-layout';
+    layout.className='issue-layout';
 
-    // Assign grid areas dynamically for irregular layout
-    const articleKeys = Object.keys(issues[issueNum]);
-    articleKeys.forEach((key, i) => {
-      const article = issues[issueNum][key];
+    const layoutAreas = ['feature','side1','side2','side3','side4'];
+
+    issues[issueNum].forEach((a,i)=>{
       const artDiv = document.createElement('div');
-      artDiv.className = 'article-block';
-      artDiv.onclick = ()=>openArticle(article.id);
-      artDiv.innerHTML = `
-        <h3 class="article-title">${article.title}</h3>
-        <div class="meta">${article.author} · ${article.date}</div>
-        ${article.image ? `<img src="${article.image}" alt="${article.title}">` : ''}
-        <p class="synopsis">${article.content.substring(0,200)}...</p>
+      artDiv.className='article-block';
+      artDiv.onclick=()=>openArticle(a.id);
+      artDiv.style.gridArea=layoutAreas[i % layoutAreas.length];
+      artDiv.innerHTML=`
+        <h3 class="article-title">${a.title}</h3>
+        <div class="meta">${a.author} · ${a.date}</div>
+        ${a.image?`<img src="${a.image}" alt="${a.title}">`:''}
+        <p class="synopsis">${a.content.substring(0,200)}...</p>
       `;
-      // Assign grid areas to create irregular layout
-      const areas = ['feature', 'side1', 'side2', 'side3', 'side4'];
-      artDiv.style.gridArea = areas[i % areas.length];
       layout.appendChild(artDiv);
     });
 

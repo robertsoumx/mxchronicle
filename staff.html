@@ -1,13 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Staff Portal · MX Chronicles</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MX Chronicles · Staff Portal</title>
+
 <link rel="stylesheet" href="style.css">
 <script src="data.js" defer></script>
+<script src="articles.js" defer></script>
 </head>
-<body>
+<body onload="renderStaffPortal()">
 
+<!-- TOP BAR -->
 <header class="top-bar">
   <div class="masthead">MX CHRONICLES</div>
   <nav class="top-nav">
@@ -18,64 +22,111 @@
   </nav>
 </header>
 
-<main class="section-paper">
-  <section id="login">
-    <h2>Staff Login</h2>
-    <input type="password" id="pass" placeholder="Enter password">
-    <button onclick="login()">Enter</button>
-    <p id="err"></p>
+<main class="staff-main" style="padding:2rem;">
+
+  <!-- STAFF MANAGEMENT -->
+  <section style="margin-bottom:2rem;">
+    <h2>Staff Members</h2>
+    <div id="staff-list" style="margin-bottom:1rem;"></div>
+
+    <input type="text" id="new-staff" placeholder="New staff name" style="padding:0.5rem;">
+    <button onclick="addStaff()">Add Staff</button>
   </section>
 
-  <section id="dashboard" hidden>
-    <h2>Manage Issues</h2>
-    <div id="issueList"></div>
-
-    <h2>Manage Staff</h2>
-    <div id="staffManage"></div>
-
-    <h2>Manage Articles</h2>
-    <div id="articleManage"></div>
+  <!-- ARTICLE MANAGEMENT -->
+  <section>
+    <h2>Articles</h2>
+    <div class="article-grid" id="staff-articles"></div>
   </section>
+
 </main>
 
 <script>
-const PASSWORD = "26MXChronicles";
-
-function login() {
-  if(pass.value === PASSWORD){
-    login.hidden = true;
-    dashboard.hidden = false;
-    renderDashboard();
-  } else err.textContent = "Incorrect password";
+function renderStaffPortal(){
+  renderStaffList();
+  renderStaffArticles();
 }
 
-function renderDashboard() {
-  // Issues
-  issueList.innerHTML = issues.map(i => `
-    <div><strong>Issue ${i.number}</strong>: ${i.theme}</div>
-  `).join("");
+// -------------------
+// STAFF LIST FUNCTIONS
+// -------------------
+function renderStaffList(){
+  const listContainer = document.getElementById('staff-list');
+  listContainer.innerHTML = '';
+  staff.forEach((name, idx)=>{
+    const div = document.createElement('div');
+    div.className = 'staff-name';
+    div.style.marginBottom = '0.5rem';
+    div.innerHTML = `${name} <button onclick="removeStaff(${idx})">Remove</button>`;
+    listContainer.appendChild(div);
+  });
+}
 
-  // Staff
-  staffManage.innerHTML = staff.map((s,i) => `
-    <div>
-      ${s.name} 
-      <select onchange="staff[${i}].role=this.value">
-        ${["Editorial Lead","Senior Writer","Writer","Historian","Contributor"]
-          .map(r=>`<option ${r===s.role?"selected":""}>${r}</option>`).join("")}
-      </select>
-    </div>
-  `).join("");
+function addStaff(){
+  const input = document.getElementById('new-staff');
+  const name = input.value.trim();
+  if(name){
+    staff.push(name);
+    input.value = '';
+    renderStaffList();
+  }
+}
 
-  // Articles
-  articleManage.innerHTML = articles.map(a => `
-    <div>
-      <a href="article.html?id=${a.id}" target="_blank">${a.title}</a>
-      <select onchange="articles.find(x=>x.id===${a.id}).featured=this.value==='true'">
-        <option value="true" ${a.featured?'selected':''}>Featured</option>
-        <option value="false" ${!a.featured?'selected':''}>Unfeature</option>
-      </select>
-    </div>
-  `).join("");
+function removeStaff(idx){
+  staff.splice(idx,1);
+  renderStaffList();
+}
+
+// -------------------
+// ARTICLE FUNCTIONS
+// -------------------
+function renderStaffArticles(){
+  const grid = document.getElementById('staff-articles');
+  grid.innerHTML = '';
+
+  Object.entries(articles).forEach(([id,a])=>{
+    const div = document.createElement('div');
+    div.className = 'article-card';
+    div.innerHTML = `
+      <h2 class="article-title">${a.title.toUpperCase()}</h2>
+      <div class="article-meta">${a.author} · ${a.date} · Issue ${a.issue}</div>
+      ${a.image?`<img src="${a.image}" alt="${a.title}">`:''}
+      <p style="margin-top:0.5rem;">
+        <button onclick="editArticle('${id}')">Edit</button>
+        <button onclick="deleteArticle('${id}')">Delete</button>
+        <button onclick="toggleFeature('${id}')">${a.featured?'Unfeature':'Feature'}</button>
+      </p>
+    `;
+    grid.appendChild(div);
+  });
+}
+
+// -------------------
+// ARTICLE MANAGEMENT HELPERS
+// -------------------
+function editArticle(id){
+  const a = articles[id];
+  const newTitle = prompt("Edit title", a.title);
+  const newAuthor = prompt("Edit author", a.author);
+  const newDate = prompt("Edit date", a.date);
+  const newContent = prompt("Edit content", a.content);
+  if(newTitle) a.title = newTitle;
+  if(newAuthor) a.author = newAuthor;
+  if(newDate) a.date = newDate;
+  if(newContent) a.content = newContent;
+  renderStaffArticles();
+}
+
+function deleteArticle(id){
+  if(confirm("Delete this article?")){
+    delete articles[id];
+    renderStaffArticles();
+  }
+}
+
+function toggleFeature(id){
+  articles[id].featured = !articles[id].featured;
+  renderStaffArticles();
 }
 </script>
 

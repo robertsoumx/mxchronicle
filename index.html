@@ -2,17 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MX Chronicles · Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <link rel="stylesheet" href="style.css">
   <script src="data.js" defer></script>
   <script src="script.js" defer></script>
 </head>
+
 <body onload="renderHome()">
 
-<header class="site-header">
+<!-- TOP RED BAR -->
+<header class="top-bar">
   <div class="masthead">MX CHRONICLES</div>
-  <nav class="nav-tabs">
+  <nav class="top-nav">
     <a href="index.html" class="active">HOME</a>
     <a href="articles.html">ARTICLES</a>
     <a href="about.html">ABOUT</a>
@@ -20,64 +23,55 @@
   </nav>
 </header>
 
-<main id="home-container">
-  <!-- Issues rendered dynamically -->
+<!-- MAIN PARTITION -->
+<main class="homepage-layout">
+
+  <!-- LEFT COLUMN -->
+  <aside class="issue-sidebar">
+    <div class="issue-number">ISSUE<br><span>02</span></div>
+    <div class="issue-theme">
+      <h3>THEME</h3>
+      <p>
+        A deep exploration of forgotten eras, colonial memory,
+        and the artifacts that shaped early modern civilization.
+      </p>
+    </div>
+  </aside>
+
+  <!-- CENTER + RIGHT -->
+  <section class="article-field" id="home-articles">
+    <!-- Articles injected -->
+  </section>
+
 </main>
 
 <script>
-function renderHome(){
-  const container = document.getElementById('home-container');
-  container.innerHTML = '';
+function renderHome() {
+  const container = document.getElementById("home-articles");
+  container.innerHTML = "";
 
-  // group articles by issue
-  const issues = {};
-  for(const [id,a] of Object.entries(articles)){
-    if(!issues[a.issue]) issues[a.issue] = [];
-    issues[a.issue].push({...a,id});
-  }
+  Object.entries(articles).forEach(([id, a], i) => {
+    const div = document.createElement("article");
+    div.className = "article-card";
+    div.onclick = () => openArticle(id);
 
-  const issueKeys = Object.keys(issues).sort((a,b)=> b-a);
+    div.style.gridArea =
+      i === 0 ? "feature" :
+      i === 1 ? "wide" :
+      i === 2 ? "tall" :
+      "normal";
 
-  issueKeys.forEach((issueNum, idx)=>{
-    const section = document.createElement('section');
-    section.className='issue-section';
-    section.style.backgroundImage=`url('https://picsum.photos/1200/250?grayscale&random=${idx}')`;
-    section.style.backgroundSize='cover';
-    section.style.backgroundPosition='center';
+    div.innerHTML = `
+      <h2 class="article-title">${a.title.toUpperCase()}</h2>
+      <div class="article-meta">${a.author} · ${a.date}</div>
+      <img src="${a.image}" alt="${a.title}">
+      <p class="article-synopsis">${a.content.slice(0,180)}...</p>
+    `;
 
-    const overlay = document.createElement('div');
-    overlay.className='issue-overlay';
-
-    const banner = document.createElement('div');
-    banner.className='issue-banner';
-    banner.innerHTML=`<h2>ISSUE ${issueNum}</h2>`;
-    overlay.appendChild(banner);
-
-    // irregular layout using CSS grid
-    const layout = document.createElement('div');
-    layout.className='issue-layout';
-
-    const layoutAreas = ['feature','side1','side2','side3','side4'];
-
-    issues[issueNum].forEach((a,i)=>{
-      const artDiv = document.createElement('div');
-      artDiv.className='article-block';
-      artDiv.onclick=()=>openArticle(a.id);
-      artDiv.style.gridArea=layoutAreas[i % layoutAreas.length];
-      artDiv.innerHTML=`
-        <h3 class="article-title">${a.title}</h3>
-        <div class="meta">${a.author} · ${a.date}</div>
-        ${a.image?`<img src="${a.image}" alt="${a.title}">`:''}
-        <p class="synopsis">${a.content.substring(0,200)}...</p>
-      `;
-      layout.appendChild(artDiv);
-    });
-
-    overlay.appendChild(layout);
-    section.appendChild(overlay);
-    container.appendChild(section);
+    container.appendChild(div);
   });
 }
 </script>
+
 </body>
 </html>

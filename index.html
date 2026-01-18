@@ -12,7 +12,6 @@
 
 <body onload="renderHome()">
 
-<!-- TOP RED BAR -->
 <header class="top-bar">
   <div class="masthead">MX CHRONICLES</div>
   <nav class="top-nav">
@@ -23,37 +22,44 @@
   </nav>
 </header>
 
-<!-- MAIN PARTITION -->
 <main class="homepage-layout">
 
-  <!-- LEFT COLUMN -->
+  <!-- LEFT -->
   <aside class="issue-sidebar">
-    <div class="issue-number">ISSUE<br><span>02</span></div>
+    <div class="issue-number">
+      ISSUE<br>
+      <span onclick="setIssue(1)">01</span>
+      <span onclick="setIssue(2)">02</span>
+    </div>
+
     <div class="issue-theme">
-      <h3>THEME</h3>
-      <p>
-        A deep exploration of forgotten eras, colonial memory,
-        and the artifacts that shaped early modern civilization.
-      </p>
+      <h3 id="issue-theme-title"></h3>
+      <p id="issue-theme-desc"></p>
     </div>
   </aside>
 
-  <!-- CENTER + RIGHT -->
-  <section class="article-field" id="home-articles">
-    <!-- Articles injected -->
-  </section>
+  <!-- MIDDLE + RIGHT -->
+  <section class="article-field" id="home-articles"></section>
 
 </main>
 
 <script>
 function renderHome() {
+  const issueData = issues[currentIssue];
+  document.getElementById("issue-theme-title").innerText =
+    issueData.theme;
+  document.getElementById("issue-theme-desc").innerText =
+    issueData.description;
+
   const container = document.getElementById("home-articles");
   container.innerHTML = "";
 
-  Object.entries(articles).forEach(([id, a], i) => {
+  const filtered = articles.filter(a => a.issue === currentIssue);
+
+  filtered.forEach((a, i) => {
     const div = document.createElement("article");
     div.className = "article-card";
-    div.onclick = () => openArticle(id);
+    div.onclick = () => openArticle(a.id);
 
     div.style.gridArea =
       i === 0 ? "feature" :
@@ -64,8 +70,8 @@ function renderHome() {
     div.innerHTML = `
       <h2 class="article-title">${a.title.toUpperCase()}</h2>
       <div class="article-meta">${a.author} · ${a.date}</div>
-      <img src="${a.image}" alt="${a.title}">
-      <p class="article-synopsis">${a.content.slice(0,180)}...</p>
+      <img src="${a.image}">
+      <p class="article-synopsis">${a.content.slice(0,160)}...</p>
     `;
 
     container.appendChild(div);

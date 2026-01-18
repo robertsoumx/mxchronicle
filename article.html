@@ -6,8 +6,8 @@
 <link rel="stylesheet" href="style.css">
 <script src="data.js" defer></script>
 </head>
-
 <body>
+
 <header class="top-bar">
   <div class="masthead">MX CHRONICLES</div>
   <nav class="top-nav">
@@ -21,15 +21,16 @@
 <main class="article-paper" id="article"></main>
 
 <script>
-const id = Number(new URLSearchParams(location.search).get("id"));
+const params = new URLSearchParams(window.location.search);
+const id = Number(params.get("id"));
 const a = articles.find(x => x.id === id);
 
-document.getElementById("article").innerHTML = `
+document.getElementById("article").innerHTML = a ? `
   <h1 class="article-title">${a.title}</h1>
   <div class="article-meta">Issue ${a.issue} · ${a.author} · ${a.date}</div>
   <img src="${a.image}" style="width:100%;margin:2rem 0">
   <div class="article-body">${a.content}</div>
-`;
+` : `<h2>Article not found</h2>`;
 </script>
 </body>
 </html>

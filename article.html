@@ -28,9 +28,10 @@ const a = articles.find(x => x.id === id);
 document.getElementById("article").innerHTML = a ? `
   <h1 class="article-title">${a.title}</h1>
   <div class="article-meta">Issue ${a.issue} · ${a.author} · ${a.date}</div>
-  <img src="${a.image}" style="width:100%;margin:2rem 0">
+  <img src="${a.image}" style="width:100%; margin:2rem 0;">
   <div class="article-body">${a.content}</div>
 ` : `<h2>Article not found</h2>`;
 </script>
+
 </body>
 </html>

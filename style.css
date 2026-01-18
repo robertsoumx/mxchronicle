@@ -6,14 +6,14 @@ body {
   background:
     url("https://www.transparenttextures.com/patterns/paper-fibers.png"),
     url("https://www.transparenttextures.com/patterns/grunge-wall.png");
-  color: #1a1a1a;
+  color: #1b1b1b;
 }
 
 /* TOP BAR */
 .top-bar {
   background: #8b0000;
   color: white;
-  padding: 1rem 2rem;
+  padding: 1.2rem 2.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -21,22 +21,23 @@ body {
 
 .masthead {
   font-family: "Playfair Display", serif;
-  font-size: 1.8rem;
-  letter-spacing: 0.15em;
+  font-size: 2rem;
+  letter-spacing: 0.18em;
 }
 
 .top-nav a {
   color: white;
   text-decoration: none;
-  margin-left: 2rem;
-  letter-spacing: 0.12em;
-  font-weight: 600;
+  margin-left: 2.5rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.14em;
 }
 
 /* HOME LAYOUT */
-.home-grid {
+.home-layout {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1fr 2fr 1fr;
+  min-height: calc(100vh - 80px);
 }
 
 .issue-panel {
@@ -47,35 +48,36 @@ body {
 }
 
 .issue-number {
-  font-size: 6rem;
   font-family: "Playfair Display", serif;
-  letter-spacing: 0.1em;
+  font-size: 6rem;
+  letter-spacing: 0.12em;
 }
 
 .issue-theme {
-  font-size: 1.4rem;
-  letter-spacing: 0.15em;
+  margin-top: 1rem;
+  font-size: 1.3rem;
+  letter-spacing: 0.18em;
 }
 
-/* ARTICLES */
-.article-list {
+.article-field {
   padding: 3rem;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
 }
 
 .article-card {
   background:
-    linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.75)),
+    linear-gradient(rgba(255,255,255,0.88), rgba(255,255,255,0.78)),
     url("https://www.transparenttextures.com/patterns/newsprint.png");
-  padding: 1.5rem;
+  padding: 1.4rem;
   border-left: 4px solid rgba(139,0,0,0.7);
+  cursor: pointer;
 }
 
 .article-card img {
   width: 100%;
-  max-height: 140px;
+  max-height: 150px;
   object-fit: cover;
   margin: 1rem 0;
   filter: sepia(15%);
@@ -83,6 +85,7 @@ body {
 
 .article-title {
   font-family: "Playfair Display", serif;
+  font-size: 1.3rem;
   letter-spacing: 0.08em;
 }
 
@@ -106,7 +109,7 @@ body {
 .article-body {
   column-count: 2;
   column-gap: 3rem;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   line-height: 1.8;
 }
 
@@ -116,4 +119,9 @@ body {
   background:
     linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.75)),
     url("https://www.transparenttextures.com/patterns/old-paper.png");
+}
+
+.staff-list li {
+  margin-bottom: 0.6rem;
+  letter-spacing: 0.08em;
 }

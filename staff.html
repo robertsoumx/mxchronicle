@@ -4,25 +4,36 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MX Chronicles · Staff Portal</title>
-
 <link rel="stylesheet" href="style.css">
 <script src="data.js" defer></script>
 <script src="articles.js" defer></script>
 </head>
-<body onload="renderStaffPortal()">
+<body>
 
-<!-- TOP BAR -->
-<header class="top-bar">
-  <div class="masthead">MX CHRONICLES</div>
-  <nav class="top-nav">
-    <a href="index.html">HOME</a>
-    <a href="articles.html">ARTICLES</a>
-    <a href="about.html">ABOUT</a>
-    <a href="staff.html" class="active">STAFF PORTAL</a>
-  </nav>
-</header>
+<!-- PASSWORD OVERLAY -->
+<div id="password-overlay" style="position:fixed; top:0; left:0; width:100%; height:100%; background:#000a; display:flex; justify-content:center; align-items:center; z-index:999;">
+  <div style="background:#fbf8f2; padding:2rem; border:5px solid #8b0000; text-align:center; border-radius:10px;">
+    <h2 style="font-family:'Merriweather', serif;">Enter Staff Portal Password</h2>
+    <input type="password" id="staff-password" placeholder="Password" style="padding:0.5rem; margin-top:1rem; width:80%;">
+    <br>
+    <button onclick="checkPassword()" style="margin-top:1rem; padding:0.5rem 1rem;">Enter</button>
+    <p id="password-error" style="color:red; margin-top:0.5rem; display:none;">Incorrect password</p>
+  </div>
+</div>
 
-<main class="staff-main" style="padding:2rem;">
+<!-- MAIN STAFF PORTAL -->
+<main id="staff-portal" style="display:none; padding:2rem;">
+
+  <!-- TOP BAR -->
+  <header class="top-bar">
+    <div class="masthead">MX CHRONICLES</div>
+    <nav class="top-nav">
+      <a href="index.html">HOME</a>
+      <a href="articles.html">ARTICLES</a>
+      <a href="about.html">ABOUT</a>
+      <a href="staff.html" class="active">STAFF PORTAL</a>
+    </nav>
+  </header>
 
   <!-- STAFF MANAGEMENT -->
   <section style="margin-bottom:2rem;">
@@ -42,14 +53,30 @@
 </main>
 
 <script>
+// =======================
+// PASSWORD FUNCTION
+// =======================
+function checkPassword(){
+  const pwInput = document.getElementById('staff-password').value;
+  if(pwInput === "26MXChronicles"){
+    document.getElementById('password-overlay').style.display = 'none';
+    document.getElementById('staff-portal').style.display = 'block';
+    renderStaffPortal();
+  } else {
+    const err = document.getElementById('password-error');
+    err.style.display = 'block';
+  }
+}
+
+// =======================
+// STAFF PORTAL FUNCTIONS
+// =======================
 function renderStaffPortal(){
   renderStaffList();
   renderStaffArticles();
 }
 
-// -------------------
-// STAFF LIST FUNCTIONS
-// -------------------
+// Staff list
 function renderStaffList(){
   const listContainer = document.getElementById('staff-list');
   listContainer.innerHTML = '';
@@ -77,9 +104,7 @@ function removeStaff(idx){
   renderStaffList();
 }
 
-// -------------------
-// ARTICLE FUNCTIONS
-// -------------------
+// Article management
 function renderStaffArticles(){
   const grid = document.getElementById('staff-articles');
   grid.innerHTML = '';
@@ -88,32 +113,36 @@ function renderStaffArticles(){
     const div = document.createElement('div');
     div.className = 'article-card';
     div.innerHTML = `
-      <h2 class="article-title">${a.title.toUpperCase()}</h2>
-      <div class="article-meta">${a.author} · ${a.date} · Issue ${a.issue}</div>
-      ${a.image?`<img src="${a.image}" alt="${a.title}">`:''}
-      <p style="margin-top:0.5rem;">
-        <button onclick="editArticle('${id}')">Edit</button>
-        <button onclick="deleteArticle('${id}')">Delete</button>
-        <button onclick="toggleFeature('${id}')">${a.featured?'Unfeature':'Feature'}</button>
-      </p>
+      <form onsubmit="saveArticle(event, '${id}')">
+        <h2 class="article-title">Edit: ${a.title.toUpperCase()}</h2>
+        <div class="article-meta">
+          Issue: <input type="number" name="issue" value="${a.issue}" style="width:60px;"> |
+          Author: <input type="text" name="author" value="${a.author}"> |
+          Date: <input type="date" name="date" value="${a.date}">
+        </div>
+        <input type="text" name="title" value="${a.title}" style="width:100%; margin:0.5rem 0;">
+        <textarea name="content" style="width:100%; height:80px;">${a.content}</textarea>
+        ${a.image?`<img src="${a.image}" style="width:100%; margin:0.5rem 0;">`:''}
+        <div style="margin-top:0.5rem;">
+          <button type="submit">Save</button>
+          <button type="button" onclick="deleteArticle('${id}')">Delete</button>
+          <button type="button" onclick="toggleFeature('${id}')">${a.featured?'Unfeature':'Feature'}</button>
+        </div>
+      </form>
     `;
     grid.appendChild(div);
   });
 }
 
-// -------------------
-// ARTICLE MANAGEMENT HELPERS
-// -------------------
-function editArticle(id){
+function saveArticle(e, id){
+  e.preventDefault();
+  const form = e.target;
   const a = articles[id];
-  const newTitle = prompt("Edit title", a.title);
-  const newAuthor = prompt("Edit author", a.author);
-  const newDate = prompt("Edit date", a.date);
-  const newContent = prompt("Edit content", a.content);
-  if(newTitle) a.title = newTitle;
-  if(newAuthor) a.author = newAuthor;
-  if(newDate) a.date = newDate;
-  if(newContent) a.content = newContent;
+  a.title = form.title.value;
+  a.author = form.author.value;
+  a.date = form.date.value;
+  a.issue = form.issue.value;
+  a.content = form.content.value;
   renderStaffArticles();
 }
 

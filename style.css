@@ -87,6 +87,58 @@ body {
 .irregular-card { /* individual styles are assigned via JS grid-column/grid-row */ }
 
 /* RESPONSIVE */
+
+/* ARTICLE GRID - consistent across site */
+.article-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: auto;
+  gap: 2rem;
+  padding: 1rem 0;
+}
+
+/* ARTICLE CARD */
+.article-card, .staff-article-card {
+  background:
+    url("https://www.transparenttextures.com/patterns/newsprint.png"),
+    #fbf8f2;
+  padding: 1.5rem;
+  border-left: 5px solid #8b0000;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.article-card:hover, .staff-article-card:hover {
+  transform: translateY(-3px);
+}
+
+.article-card img, .staff-article-card img {
+  width: 100%;
+  margin: 1rem 0;
+  filter: sepia(25%);
+}
+
+.article-title {
+  font-family: 'Merriweather', serif;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.article-meta {
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.8rem;
+  color: #555;
+  margin-top: 0.3rem;
+}
+
+.article-synopsis {
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
 @media (max-width:1000px){
   .homepage-layout { grid-template-columns: 1fr; }
   .article-field { grid-template-columns:1fr; grid-auto-rows:auto; }

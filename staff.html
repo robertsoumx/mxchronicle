@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>MX Chronicles · Staff Portal</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Staff Portal · MX Chronicles</title>
 <link rel="stylesheet" href="style.css">
 <script src="data.js" defer></script>
 </head>
@@ -15,73 +14,18 @@
     <a href="index.html">HOME</a>
     <a href="articles.html">ARTICLES</a>
     <a href="about.html">ABOUT</a>
-    <a href="staff.html" class="active">STAFF PORTAL</a>
+    <a href="staff.html">STAFF PORTAL</a>
   </nav>
 </header>
 
-<main class="staff-layout">
-
-<section class="staff-panel" id="login">
-  <h2>STAFF ACCESS</h2>
-  <input type="password" id="pass" placeholder="Password">
-  <button onclick="login()">Enter</button>
-  <p id="err"></p>
+<section class="section-paper">
+  <h2>Staff</h2>
+  <ul id="staffManage"></ul>
 </section>
-
-<section id="dashboard" hidden>
-
-  <section class="staff-section">
-    <h2>ISSUES</h2>
-    <div id="issue-list"></div>
-  </section>
-
-  <section class="staff-section">
-    <h2>STAFF</h2>
-    <div id="staff-list"></div>
-  </section>
-
-</section>
-</main>
 
 <script>
-const PASSWORD="26MXChronicles";
-
-function login(){
-  if(pass.value===PASSWORD){
-    login.hidden=true;
-    dashboard.hidden=false;
-    renderAll();
-  } else err.textContent="Incorrect password";
-}
-
-function renderAll(){
-  renderIssues();
-  renderStaff();
-}
-
-function renderIssues(){
-  issue-list.innerHTML="";
-  Object.entries(issues).forEach(([n,i])=>{
-    issue-list.innerHTML+=`
-      <div class="staff-row">
-        <strong>Issue ${n}</strong> — ${i.theme}
-      </div>`;
-  });
-}
-
-function renderStaff(){
-  staff-list.innerHTML="";
-  staff.forEach((s,i)=>{
-    staff-list.innerHTML+=`
-      <div class="staff-row">
-        ${s.name}
-        <select onchange="staff[${i}].role=this.value">
-          ${["Editor","Writer","Historian","Contributor"]
-            .map(r=>`<option ${r===s.role?"selected":""}>${r}</option>`).join("")}
-        </select>
-      </div>`;
-  });
-}
+document.getElementById("staffManage").innerHTML =
+  staff.map(s => `<li>${s.name} — ${s.role}</li>`).join("");
 </script>
 </body>
 </html>

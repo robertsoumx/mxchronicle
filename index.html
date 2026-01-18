@@ -1,67 +1,77 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>MX Chronicles</title>
-<link rel="stylesheet" href="style.css">
-<script src="data.js" defer></script>
-</head>
-<body>
+  <meta charset="UTF-8">
+  <title>MX Chronicles · Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <link rel="stylesheet" href="style.css">
+  <script src="data.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+
+<body onload="renderHome()">
+
+<!-- TOP RED BAR -->
 <header class="top-bar">
   <div class="masthead">MX CHRONICLES</div>
   <nav class="top-nav">
-    <a href="index.html">HOME</a>
+    <a href="index.html" class="active">HOME</a>
     <a href="articles.html">ARTICLES</a>
     <a href="about.html">ABOUT</a>
     <a href="staff.html">STAFF PORTAL</a>
   </nav>
 </header>
 
-<div class="home-layout">
-  <aside class="issue-panel">
-    <div class="issue-number" id="issueNum"></div>
-    <div class="issue-theme" id="issueTheme"></div>
-    <button onclick="prevIssue()">← PREV</button>
-    <button onclick="nextIssue()">NEXT →</button>
+<!-- MAIN PARTITION -->
+<main class="homepage-layout">
+
+  <!-- LEFT COLUMN -->
+  <aside class="issue-sidebar">
+    <div class="issue-number">ISSUE<br><span>02</span></div>
+    <div class="issue-theme">
+      <h3>THEME</h3>
+      <p>
+        A deep exploration of forgotten eras, colonial memory,
+        and the artifacts that shaped early modern civilization.
+      </p>
+    </div>
   </aside>
 
-  <section class="article-field" id="articleField"></section>
+  <!-- CENTER + RIGHT -->
+  <section class="article-field" id="home-articles">
+    <!-- Articles injected -->
+  </section>
 
-  <aside></aside>
-</div>
+</main>
 
 <script>
-let currentIssue = 1;
+function renderHome() {
+  const container = document.getElementById("home-articles");
+  container.innerHTML = "";
 
-function renderIssue() {
-  const issue = issues.find(i => i.number === currentIssue);
-  document.getElementById("issueNum").textContent = issue.number;
-  document.getElementById("issueTheme").textContent = issue.theme;
+  Object.entries(articles).forEach(([id, a], i) => {
+    const div = document.createElement("article");
+    div.className = "article-card";
+    div.onclick = () => openArticle(id);
 
-  document.getElementById("articleField").innerHTML =
-    articles.filter(a => a.issue === currentIssue)
-      .map(a => `
-        <a class="article-card" href="article.html?id=${a.id}">
-          <div class="article-title">${a.title}</div>
-          <div class="article-meta">${a.author} · ${a.date}</div>
-          <img src="${a.image}">
-          <div class="article-synopsis">${a.synopsis}</div>
-        </a>
-      `).join("");
+    div.style.gridArea =
+      i === 0 ? "feature" :
+      i === 1 ? "wide" :
+      i === 2 ? "tall" :
+      "normal";
+
+    div.innerHTML = `
+      <h2 class="article-title">${a.title.toUpperCase()}</h2>
+      <div class="article-meta">${a.author} · ${a.date}</div>
+      <img src="${a.image}" alt="${a.title}">
+      <p class="article-synopsis">${a.content.slice(0,180)}...</p>
+    `;
+
+    container.appendChild(div);
+  });
 }
-
-function prevIssue() {
-  if (currentIssue > 1) currentIssue--;
-  renderIssue();
-}
-
-function nextIssue() {
-  if (issues.find(i => i.number === currentIssue + 1)) currentIssue++;
-  renderIssue();
-}
-
-renderIssue();
 </script>
+
 </body>
 </html>

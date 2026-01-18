@@ -21,41 +21,37 @@
   </div>
 </div>
 
-<!-- MAIN STAFF PORTAL -->
+<!-- STAFF PORTAL -->
 <main id="staff-portal" style="display:none; padding:2rem;">
 
-  <!-- TOP BAR -->
-  <header class="top-bar">
-    <div class="masthead">MX CHRONICLES</div>
-    <nav class="top-nav">
-      <a href="index.html">HOME</a>
-      <a href="articles.html">ARTICLES</a>
-      <a href="about.html">ABOUT</a>
-      <a href="staff.html" class="active">STAFF PORTAL</a>
-    </nav>
-  </header>
+<header class="top-bar">
+  <div class="masthead">MX CHRONICLES</div>
+  <nav class="top-nav">
+    <a href="index.html">HOME</a>
+    <a href="articles.html">ARTICLES</a>
+    <a href="about.html">ABOUT</a>
+    <a href="staff.html" class="active">STAFF PORTAL</a>
+  </nav>
+</header>
 
-  <!-- STAFF MANAGEMENT -->
-  <section style="margin-bottom:2rem;">
-    <h2>Staff Members</h2>
-    <div id="staff-list" style="margin-bottom:1rem;"></div>
+<!-- STAFF MANAGEMENT -->
+<section style="margin-bottom:2rem;">
+  <h2>Staff Members</h2>
+  <div id="staff-list" style="margin-bottom:1rem;"></div>
+  <input type="text" id="new-staff" placeholder="New staff name" style="padding:0.5rem;">
+  <button onclick="addStaff()">Add Staff</button>
+</section>
 
-    <input type="text" id="new-staff" placeholder="New staff name" style="padding:0.5rem;">
-    <button onclick="addStaff()">Add Staff</button>
-  </section>
-
-  <!-- ARTICLE MANAGEMENT -->
-  <section>
-    <h2>Articles</h2>
-    <div class="article-grid" id="staff-articles"></div>
-  </section>
+<!-- ARTICLE MANAGEMENT -->
+<section>
+  <h2>Articles</h2>
+  <div class="article-grid" id="staff-articles"></div>
+</section>
 
 </main>
 
 <script>
-// =======================
-// PASSWORD FUNCTION
-// =======================
+// PASSWORD CHECK
 function checkPassword(){
   const pwInput = document.getElementById('staff-password').value;
   if(pwInput === "26MXChronicles"){
@@ -63,49 +59,60 @@ function checkPassword(){
     document.getElementById('staff-portal').style.display = 'block';
     renderStaffPortal();
   } else {
-    const err = document.getElementById('password-error');
-    err.style.display = 'block';
+    document.getElementById('password-error').style.display = 'block';
   }
 }
 
-// =======================
+// -----------------------
 // STAFF PORTAL FUNCTIONS
-// =======================
-function renderStaffPortal(){
-  renderStaffList();
-  renderStaffArticles();
+// -----------------------
+function getStaff(){
+  return JSON.parse(localStorage.getItem('staff')) || [];
+}
+function saveStaff(staff){
+  localStorage.setItem('staff', JSON.stringify(staff));
 }
 
-// Staff list
+// Render staff list
 function renderStaffList(){
-  const listContainer = document.getElementById('staff-list');
-  listContainer.innerHTML = '';
+  const staffContainer = document.getElementById('staff-list');
+  const staff = getStaff();
+  staffContainer.innerHTML = '';
   staff.forEach((name, idx)=>{
     const div = document.createElement('div');
     div.className = 'staff-name';
     div.style.marginBottom = '0.5rem';
     div.innerHTML = `${name} <button onclick="removeStaff(${idx})">Remove</button>`;
-    listContainer.appendChild(div);
+    staffContainer.appendChild(div);
   });
 }
 
+// Add staff
 function addStaff(){
   const input = document.getElementById('new-staff');
+  let staff = getStaff();
   const name = input.value.trim();
   if(name){
     staff.push(name);
     input.value = '';
+    saveStaff(staff);
     renderStaffList();
   }
 }
 
+// Remove staff
 function removeStaff(idx){
+  let staff = getStaff();
   staff.splice(idx,1);
+  saveStaff(staff);
   renderStaffList();
 }
 
-// Article management
+// -----------------------
+// ARTICLE MANAGEMENT
+// -----------------------
 function renderStaffArticles(){
+  const articles = JSON.parse(localStorage.getItem('articles')) || {};
   const grid = document.getElementById('staff-articles');
   grid.innerHTML = '';
 
@@ -113,7 +120,7 @@ function renderStaffArticles(){
     const div = document.createElement('div');
     div.className = 'article-card';
     div.innerHTML = `
-      <form onsubmit="saveArticle(event, '${id}')">
+      <form onsubmit="saveArticle(event,'${id}')">
         <h2 class="article-title">Edit: ${a.title.toUpperCase()}</h2>
         <div class="article-meta">
           Issue: <input type="number" name="issue" value="${a.issue}" style="width:60px;"> |
@@ -134,30 +141,44 @@ function renderStaffArticles(){
   });
 }
 
-function saveArticle(e, id){
+// Save inline edits
+function saveArticle(e,id){
   e.preventDefault();
   const form = e.target;
+  const articles = JSON.parse(localStorage.getItem('articles'));
   const a = articles[id];
   a.title = form.title.value;
   a.author = form.author.value;
   a.date = form.date.value;
   a.issue = form.issue.value;
   a.content = form.content.value;
+  saveArticles(articles);
   renderStaffArticles();
 }
 
+// Delete article
 function deleteArticle(id){
   if(confirm("Delete this article?")){
+    const articles = JSON.parse(localStorage.getItem('articles'));
     delete articles[id];
+    saveArticles(articles);
     renderStaffArticles();
   }
 }
 
+// Toggle feature
 function toggleFeature(id){
+  const articles = JSON.parse(localStorage.getItem('articles'));
   articles[id].featured = !articles[id].featured;
+  saveArticles(articles);
+  renderStaffArticles();
+}
+
+// Render portal
+function renderStaffPortal(){
+  renderStaffList();
   renderStaffArticles();
 }
 </script>
-
 </body>
 </html>

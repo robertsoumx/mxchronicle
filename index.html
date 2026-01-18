@@ -12,7 +12,6 @@
 
 <body onload="renderHomePage()">
 
-<!-- TOP RED BAR -->
 <header class="top-bar">
   <div class="masthead">MX CHRONICLES</div>
   <nav class="top-nav">
@@ -23,71 +22,52 @@
   </nav>
 </header>
 
-<!-- MAIN HOMEPAGE GRID -->
 <main class="home-layout">
 
-  <!-- LEFT COLUMN: ISSUE INFO -->
   <aside class="issue-panel">
     <div class="issue-number">ISSUE <span id="issue-number">1</span></div>
     <div class="issue-theme" id="issue-theme">
-      THE RISE AND FALL OF EARLY EMPIRES
+      A HISTORICAL EXAMINATION
     </div>
   </aside>
 
-  <!-- CENTER + RIGHT: ARTICLES -->
-  <section class="home-articles" id="home-articles">
-    <!-- dynamically injected -->
-  </section>
+  <section class="home-articles" id="home-articles"></section>
 
 </main>
 
 <script>
-function renderHomePage(){
-  const articles = JSON.parse(localStorage.getItem('articles')) || {};
-  const container = document.getElementById('home-articles');
+function renderHomePage() {
+  const container = document.getElementById("home-articles");
+  if (!container) return;
 
-  // Group by issue
+  const articles = JSON.parse(localStorage.getItem("articles")) || {};
   const issues = {};
-  Object.values(articles).forEach(a=>{
-    if(!issues[a.issue]) issues[a.issue] = [];
+
+  Object.values(articles).forEach(a => {
+    if (!issues[a.issue]) issues[a.issue] = [];
     issues[a.issue].push(a);
   });
 
-  // Pick latest issue
   const issueNumbers = Object.keys(issues).sort((a,b)=>b-a);
   const currentIssue = issueNumbers[0];
-  document.getElementById('issue-number').textContent = currentIssue;
 
-  // Optional: hardcoded themes per issue
-  const themes = {
-    1: "THE RISE AND FALL OF EARLY EMPIRES",
-    2: "REVOLUTIONS THAT SHAPED MODERNITY"
-  };
-  document.getElementById('issue-theme').textContent =
-    themes[currentIssue] || "A HISTORICAL EXAMINATION";
+  document.getElementById("issue-number").textContent = currentIssue || "—";
 
-  container.innerHTML = '';
+  container.innerHTML = "";
 
-  // Layout logic: featured articles span wide
-  issues[currentIssue].forEach((a, idx)=>{
-    const article = document.createElement('article');
-    article.className = a.featured
-      ? 'home-article featured'
-      : 'home-article standard';
+  (issues[currentIssue] || []).forEach(a => {
+    const el = document.createElement("article");
+    el.className = a.featured ? "home-article featured" : "home-article";
+    el.onclick = () => openArticle(a.id);
 
-    article.onclick = () => openArticle(a.id);
-
-    article.innerHTML = `
-      ${a.image ? `<img src="${a.image}" alt="${a.title}">` : ''}
+    el.innerHTML = `
+      ${a.image ? `<img src="${a.image}" alt="${a.title}">` : ""}
       <h2 class="article-title">${a.title.toUpperCase()}</h2>
-      <div class="article-meta">
-        ${a.author} · ${a.date}
-      </div>
-      <p class="article-synopsis">
-        ${a.content.slice(0,150)}...
-      </p>
+      <div class="article-meta">${a.author} · ${a.date}</div>
+      <p class="article-synopsis">${a.content.slice(0,140)}...</p>
     `;
-    container.appendChild(article);
+
+    container.appendChild(el);
   });
 }
 </script>

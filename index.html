@@ -1,83 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>MX Chronicles · Home</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <link rel="stylesheet" href="style.css">
-  <script src="data.js" defer></script>
-  <script src="script.js" defer></script>
+<meta charset="UTF-8">
+<title>MX Chronicles</title>
+<link rel="stylesheet" href="style.css">
+<script src="data.js" defer></script>
 </head>
 
-<body onload="renderHome()">
-
+<body>
 <header class="top-bar">
   <div class="masthead">MX CHRONICLES</div>
   <nav class="top-nav">
-    <a href="index.html" class="active">HOME</a>
+    <a href="index.html">HOME</a>
     <a href="articles.html">ARTICLES</a>
     <a href="about.html">ABOUT</a>
     <a href="staff.html">STAFF PORTAL</a>
   </nav>
 </header>
 
-<main class="homepage-layout">
-
-  <!-- LEFT -->
-  <aside class="issue-sidebar">
-    <div class="issue-number">
-      ISSUE<br>
-      <span onclick="setIssue(1)">01</span>
-      <span onclick="setIssue(2)">02</span>
-    </div>
-
-    <div class="issue-theme">
-      <h3 id="issue-theme-title"></h3>
-      <p id="issue-theme-desc"></p>
-    </div>
+<div class="home-grid">
+  <aside class="issue-panel">
+    <div class="issue-number" id="issueNum">1</div>
+    <div class="issue-theme" id="issueTheme"></div>
   </aside>
 
-  <!-- MIDDLE + RIGHT -->
-  <section class="article-field" id="home-articles"></section>
-
-</main>
+  <section class="article-list" id="homeArticles"></section>
+</div>
 
 <script>
-function renderHome() {
-  const issueData = issues[currentIssue];
-  document.getElementById("issue-theme-title").innerText =
-    issueData.theme;
-  document.getElementById("issue-theme-desc").innerText =
-    issueData.description;
+const issue = 1;
+document.getElementById("issueTheme").textContent =
+  issues.find(i => i.number === issue).theme;
 
-  const container = document.getElementById("home-articles");
-  container.innerHTML = "";
-
-  const filtered = articles.filter(a => a.issue === currentIssue);
-
-  filtered.forEach((a, i) => {
-    const div = document.createElement("article");
-    div.className = "article-card";
-    div.onclick = () => openArticle(a.id);
-
-    div.style.gridArea =
-      i === 0 ? "feature" :
-      i === 1 ? "wide" :
-      i === 2 ? "tall" :
-      "normal";
-
-    div.innerHTML = `
-      <h2 class="article-title">${a.title.toUpperCase()}</h2>
+document.getElementById("homeArticles").innerHTML =
+  articles.filter(a => a.issue === issue).map(a => `
+    <a class="article-card" href="article.html?id=${a.id}">
+      <h3 class="article-title">${a.title}</h3>
       <div class="article-meta">${a.author} · ${a.date}</div>
       <img src="${a.image}">
-      <p class="article-synopsis">${a.content.slice(0,160)}...</p>
-    `;
-
-    container.appendChild(div);
-  });
-}
+      <p class="article-synopsis">${a.synopsis}</p>
+    </a>
+  `).join("");
 </script>
-
 </body>
 </html>

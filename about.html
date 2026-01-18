@@ -26,14 +26,15 @@
   </p>
 
   <h3>Staff</h3>
-  <ul id="staffList"></ul>
+  <ul id="staffList" class="staff-list"></ul>
 </section>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("staffList").innerHTML =
-    staff.map(s => `<li>${s.name} — ${s.role}</li>`).join("");
+  const ul = document.getElementById("staffList");
+  ul.innerHTML = staff.map(s => `<li>${s.name} — ${s.role}</li>`).join("");
 });
 </script>
+
 </body>
 </html>

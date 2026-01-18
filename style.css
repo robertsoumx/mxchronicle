@@ -97,3 +97,57 @@ body {
   font-size: 0.9rem;
   line-height: 1.55;
 }
+
+/* ───────── STAFF PORTAL ───────── */
+
+.staff-layout {
+  padding: 2.5rem;
+  background:
+    url("https://www.transparenttextures.com/patterns/paper-fibers.png"),
+    url("https://www.transparenttextures.com/patterns/grunge-wall.png");
+}
+
+.staff-panel,
+.staff-section {
+  background:
+    linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.75)),
+    url("https://www.transparenttextures.com/patterns/newsprint.png");
+  padding: 2rem;
+  margin-bottom: 2.5rem;
+  border-left: 5px solid rgba(139,0,0,0.8);
+}
+
+.staff-panel h2,
+.staff-section h2 {
+  font-family: "Playfair Display", serif;
+  letter-spacing: 0.12em;
+}
+
+.staff-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.6rem 0;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px dashed rgba(139,0,0,0.4);
+}
+
+.staff-row button {
+  background: none;
+  border: 1px solid rgba(139,0,0,0.6);
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+}
+
+.staff-row button:hover {
+  background: rgba(139,0,0,0.1);
+}
+
+.staff-layout input,
+.staff-layout textarea {
+  width: 100%;
+  margin: 0.4rem 0;
+  padding: 0.5rem;
+  font-family: "Source Sans 3", sans-serif;
+}
+

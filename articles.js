@@ -1,78 +1,98 @@
-// articles.js
-
-function getArticles(){
-  return JSON.parse(localStorage.getItem('articles')) || {};
+// ==========================
+// SAFE DATA ACCESS
+// ==========================
+function getArticles() {
+  return JSON.parse(localStorage.getItem("articles")) || {};
 }
 
-function saveArticles(articles){
-  localStorage.setItem('articles', JSON.stringify(articles));
+function saveArticles(articles) {
+  localStorage.setItem("articles", JSON.stringify(articles));
 }
 
-// Render all articles in 3-column grid
+// ==========================
+// ARTICLES LIST PAGE
+// ==========================
 function renderArticles() {
   const grid = document.getElementById("articles-grid");
-  if (!grid) return;
-
   const searchBox = document.getElementById("search-box");
   const filterIssue = document.getElementById("filter-issue");
 
+  // 🔴 CRITICAL GUARD
+  if (!grid || !searchBox || !filterIssue) return;
+
   const articles = getArticles();
 
-  // Populate issues dropdown
-  const allIssues = [...new Set(Object.values(articles).map(a=>a.issue))].sort((a,b)=>a-b);
-  filterIssue.innerHTML = '<option value="">All Issues</option>' + allIssues.map(i=>`<option value="${i}">Issue ${i}</option>`).join('');
+  // Populate issue filter
+  const issues = [...new Set(Object.values(articles).map(a => a.issue))].sort((a,b)=>a-b);
+  filterIssue.innerHTML =
+    `<option value="">All Issues</option>` +
+    issues.map(i => `<option value="${i}">Issue ${i}</option>`).join("");
 
-  function displayArticles(){
+  function display() {
     const query = searchBox.value.toLowerCase();
-    const selectedIssue = filterIssue.value;
-    grid.innerHTML = '';
+    const issueFilter = filterIssue.value;
 
-    Object.entries(articles).forEach(([id,a])=>{
-      if(selectedIssue && a.issue != selectedIssue) return;
-      const combinedText = `${a.title} ${a.author} ${a.content}`.toLowerCase();
-      if(query && !combinedText.includes(query)) return;
+    grid.innerHTML = "";
 
-      const card = document.createElement('div');
-      card.className = 'article-card';
+    Object.entries(articles).forEach(([id, a]) => {
+      if (issueFilter && String(a.issue) !== issueFilter) return;
+
+      const text = `${a.title} ${a.author} ${a.content}`.toLowerCase();
+      if (query && !text.includes(query)) return;
+
+      const card = document.createElement("div");
+      card.className = "article-card";
       card.onclick = () => openArticle(id);
+
       card.innerHTML = `
         <h2 class="article-title">${a.title.toUpperCase()}</h2>
-        <div class="article-meta">By ${a.author} · ${a.date} · Issue ${a.issue}</div>
-        ${a.image?`<img src="${a.image}" alt="${a.title}">`:''}
-        <p class="article-synopsis">${a.content.slice(0,180)}...</p>
+        <div class="article-meta">${a.author} · ${a.date} · Issue ${a.issue}</div>
+        ${a.image ? `<img src="${a.image}" alt="${a.title}">` : ""}
+        <p class="article-synopsis">${a.content.slice(0,160)}...</p>
       `;
+
       grid.appendChild(card);
     });
   }
 
-  searchBox.addEventListener('input', displayArticles);
-  filterIssue.addEventListener('change', displayArticles);
-
-  displayArticles();
+  searchBox.addEventListener("input", display);
+  filterIssue.addEventListener("change", display);
+  display();
 }
 
-// Open article page
-function openArticle(id){
-  localStorage.setItem('currentArticle', id);
-  window.location.href = 'article.html';
+// ==========================
+// ARTICLE NAVIGATION
+// ==========================
+function openArticle(id) {
+  localStorage.setItem("currentArticle", id);
+  window.location.href = "article.html";
 }
 
-// Render single article in article.html
-function renderArticlePage(){
-  const articleId = localStorage.getItem('currentArticle');
+// ==========================
+// SINGLE ARTICLE PAGE
+// ==========================
+function renderArticlePage() {
+  const container = document.getElementById("article-container");
+
+  // 🔴 CRITICAL GUARD
+  if (!container) return;
+
   const articles = getArticles();
-  if(!articleId || !articles[articleId]) return;
+  const id = localStorage.getItem("currentArticle");
 
-  const a = articles[articleId];
-  const container = document.getElementById('article-container');
-  if(!container) return;
+  if (!id || !articles[id]) {
+    container.innerHTML = "<p>Article not found.</p>";
+    return;
+  }
+
+  const a = articles[id];
 
   container.innerHTML = `
-    <div class="article-page">
+    <article class="article-page">
       <h1 class="article-title">${a.title.toUpperCase()}</h1>
-      <div class="article-meta">By ${a.author} · ${a.date} · Issue ${a.issue}</div>
-      ${a.image?`<img src="${a.image}" alt="${a.title}">`:''}
+      <div class="article-meta">${a.author} · ${a.date} · Issue ${a.issue}</div>
+      ${a.image ? `<img src="${a.image}" alt="${a.title}">` : ""}
       <p class="article-content">${a.content}</p>
-    </div>
+    </article>
   `;
 }
